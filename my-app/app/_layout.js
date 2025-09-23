@@ -1,18 +1,9 @@
 import { Stack } from "expo-router";
 
 export default function RootLayout() {
-  return <Stack
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: '#f4511e',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      }}>
+  return <Stack>
       <Stack.Screen name="(app)" options={{headerShown:false}} />
-      <Stack.Screen name="login" options={{title:"Se connecter"}} />
-      <Stack.Screen name="signup" options={{title:'inscrire'}} />
+      <Stack.Screen name="login" options={{title:"Se connecter", headerShown:false}} />
+      <Stack.Screen name="signup" options={{title:'inscrire', headerShown:false}} />
     </Stack>;
 }
