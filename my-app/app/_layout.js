@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
-import { ImageBackground, StyleSheet } from "react-native";
+import { ImageBackground, StyleSheet, View } from "react-native";
 
-const backgroundImage = require("../assets/images/bg.webp");
+const backgroundImage = require("../assets/images/bg.png");
 
 export default function RootLayout() {
   return (
@@ -9,6 +9,7 @@ export default function RootLayout() {
       source={backgroundImage}
       style={styles.image}
     >
+      <View style={{ flex: 1, backgroundColor: "red", borderBlockColor: "blue" }} >
       <Stack>
         <Stack.Screen
           name="(tabs)"
@@ -23,6 +24,7 @@ export default function RootLayout() {
           options={{ title: "S'inscrire", headerShown: false }}
         />
       </Stack>
+      </View>
     </ImageBackground>
   );
 }
@@ -32,8 +34,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    width: "100%",
-    height: "100%",
     resizeMode: "cover",
   },
 });
