@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
-
+import BgImage from '../../components/Theme';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function Profil() {
   const user={prenom:'Ana',nom:'Deschamps',email:'ana.deschamps@gmail.com'};
   return (
+    <BgImage source={require('../../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
     <View style={styles.container}>
       <View style={styles.loginContainer}>
 
@@ -21,6 +21,7 @@ export default function Profil() {
 
       </View>
     </View>
+    </BgImage>
   );
 }
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-native";
+import BgImage from '../components/Theme';
 
 // Formulaire d'inscription
 const SignupForm = ({
@@ -11,6 +12,7 @@ const SignupForm = ({
   setConfirmPassword,
 }) => {
   return (
+    <BgImage source={require('../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
     <View style={styles.container}>
       <View style={styles.signupContainer}>
         <Text style={styles.title}>Inscription</Text>
@@ -53,6 +55,7 @@ const SignupForm = ({
         </TouchableOpacity>
       </View>
     </View>
+    </BgImage>
   );
 };
 
@@ -61,7 +64,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f2f2f2",
   },
   signupContainer: {
     width: 320,

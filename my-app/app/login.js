@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
+import BgImage from '../components/Theme';
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
@@ -14,6 +15,7 @@ const LoginScreen = () => {
     };
 
     return (
+        <BgImage source={require('../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
         <View style={styles.container}>
             <View style={styles.loginContainer}>
                 <Text style={styles.title}>Connexion</Text>
@@ -42,6 +44,7 @@ const LoginScreen = () => {
                 </TouchableOpacity>
             </View>
         </View>
+        </BgImage>
     );
 };
 
