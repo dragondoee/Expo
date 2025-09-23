@@ -28,7 +28,19 @@ export default function Index() {
             shadowRadius: 5,
             minWidth: 250,
           }}>
-            <Text style={{ marginBottom: 10 }}>Votre note ici...</Text>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+              <Text style={{ marginBottom: 10 }}>Titre : </Text>
+              <TextInput
+                placeholder="Écrivez votre titre"
+                style={{
+                  borderColor: '#ccc',
+                  borderWidth: 1,
+                  borderRadius: 5,
+                  padding: 7,
+                  marginBottom: 10,
+                }}
+              />
+            </View>
             <TextInput
               value={note}
               onChangeText={setNote}
@@ -39,13 +51,13 @@ export default function Index() {
                 borderWidth: 1,
                 borderRadius: 5,
                 padding: 10,
-                minHeight: 60,
+                minHeight: 100,
                 marginBottom: 10,
                 textAlignVertical: 'top',
               }}
             />
-            <TouchableOpacity onPress={() => setShowNote(false)}>
-              <Text style={{ color: 'blue' }}>Fermer</Text>
+            <TouchableOpacity onPress={() => setShowNote(false)} style={{ backgroundColor: '#eee', padding: 10, borderRadius: 5, width: '100%', alignItems: 'center', marginTop: 5 }}>
+              <Text style={{ color: 'green', textAlign: 'right' }}>Enregistrer</Text>
             </TouchableOpacity>
           </View>
         )}
