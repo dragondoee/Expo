@@ -64,8 +64,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f2f2f2",
   },
   signupContainer: {
-    maxWidth: 380,
-    width: "90%",
+    width: 320,
     paddingVertical: 24,
     paddingHorizontal: 24,
     backgroundColor: "white",
