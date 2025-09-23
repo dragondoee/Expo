@@ -50,11 +50,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#f2f2f2",
+        /* backgroundColor: "red", */
     },
     loginContainer: {
-        maxWidth: 350,
-        width: "90%",
+        width: 300,
         paddingVertical: 24,
         paddingHorizontal: 24,
         backgroundColor: "white",
