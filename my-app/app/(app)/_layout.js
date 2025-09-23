@@ -11,8 +11,7 @@ export default function RootLayout() {
           fontWeight: 'bold',
         },
       }}>
-      <Stack.Screen name="(app)" options={{headerShown:false}} />
-      <Stack.Screen name="login" options={{title:"Se connecter"}} />
-      <Stack.Screen name="signup" options={{title:'inscrire'}} />
+      <Stack.Screen name="index" options={{title:"To-do List"}} />
+      <Stack.Screen name="profil" options={{title:"Profil"}} />
     </Stack>;
 }
