@@ -15,3 +15,9 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+app.use(cors());
+app.use(morgan('tiny'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
