@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
 import BgImage from '../components/Theme';
+import {Link} from'expo-router';
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
@@ -12,6 +13,7 @@ const LoginScreen = () => {
             return;
         }
         Alert.alert('Connexion', `Email: ${email}\nPassword: ${password}`);
+        window.location.href = "/";
     };
 
     return (
@@ -19,8 +21,9 @@ const LoginScreen = () => {
         <View style={styles.container}>
             <View style={styles.loginContainer}>
                 <Text style={styles.title}>Connexion</Text>
+                <Link style={styles.link} href='signup'>Vous n'avez de compte ? S'inscrire</Link>
 
-                <Text style={styles.label}>Adresse Email :</Text>
+                <Text style={styles.label}>Adresse email :</Text>
                 <TextInput
                     style={styles.input}
                     value={email}
@@ -72,6 +75,12 @@ const styles = StyleSheet.create({
         marginBottom: 24,
         fontSize: 24,
         fontWeight: "bold",
+    },
+    link: {
+        fontSize:13,
+        textAlign:'center',
+        textDecorationLine:'underline',
+        textDecorationColor:"#e75480",
     },
     label: {
         fontWeight: "bold",

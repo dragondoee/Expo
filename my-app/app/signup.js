@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-native";
 import BgImage from '../components/Theme';
+import {Link} from'expo-router';
 
 // Formulaire d'inscription
 const SignupForm = ({
@@ -16,6 +17,7 @@ const SignupForm = ({
     <View style={styles.container}>
       <View style={styles.signupContainer}>
         <Text style={styles.title}>Inscription</Text>
+        <Link style={styles.link} href='login'>Vous avez un compte ? Se connecter</Link>
 
         <Text style={styles.label}>Prénom :</Text>
         <TextInput style={styles.input} placeholder="Prénom" />
@@ -82,6 +84,12 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     fontSize: 24,
     fontWeight: "bold",
+  },
+  link: {
+      fontSize:13,
+      textAlign:'center',
+      textDecorationLine:'underline',
+      textDecorationColor:"#e75480",
   },
   label: {
     fontWeight: "bold",
