@@ -8,10 +8,19 @@ const bodyParser = require('body-parser');
 
 require('./services/mongo');
 
+app.use(morgan('tiny'));
+app.use(cors({credentials: true, origin: '*'}));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({ extended: true}));
+
+// require('./services/passport')(app);
+
+app.use('/user', require('./controllers/user'));
+
 app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+  res.send('Hello World! - API - LAST DEPLOY:'+ new Date().toISOString());
+});
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Example app listening on port ${port}`);
+});
