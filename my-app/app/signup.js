@@ -3,6 +3,22 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-nativ
 import BgImage from '../components/Theme';
 import {Link} from'expo-router';
 
+// fetch('http://localhost:8081/user/login', {
+//         method: 'POST',
+//         headers: {
+//             Accept: 'application/json',
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//             email: 'yourValue',
+//             first_name: 'yourOtherValue',
+//             last_name: 'yourOtherValue',
+//             password: 'yourOtherValue',
+//             cpassword: 'yourOtherValue',
+//         }),
+//     });
+
+
 // Formulaire d'inscription
 const SignupForm = ({
   email,

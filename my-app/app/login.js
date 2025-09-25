@@ -1,20 +1,33 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
 import BgImage from '../components/Theme';
 import {Link} from'expo-router';
+import api from "../services/api";
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [user, setUser] = useState([]);
 
-    const handleLogin = () => {
+
+    const handleLogin = async () => {
+        
         if (!email || !password) {
             Alert.alert('Erreur', 'Veuillez remplir tous les champs.');
             return;
-        }
+        };
+
+        const { ok, data } = await api.post("/user/login", {email:email, password:password});
+        if (!ok) return console.log("error fetching lists");
+        setUser(data);
+
+        
         Alert.alert('Connexion', `Email: ${email}\nPassword: ${password}`);
         window.location.href = "/";
+
+        
     };
+
 
     return (
         <BgImage source={require('../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
