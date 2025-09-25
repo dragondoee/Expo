@@ -86,18 +86,22 @@ export default function Index() {
         position: 'absolute',
         bottom: 30,
         right: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
       }}>
         <TouchableOpacity
           onPress={() => setShowNote(true)}
           style={{
-            borderRadius: 30,
+            borderRadius: 50,
             padding: 20,
-            width: 50,
-            height: 50,
+            width: 70,
+            height: 70,
             backgroundColor: '#2196F3',
             justifyContent: 'center',
             alignItems: 'center',
-          }}
+            marginBottom: 100,
+            }}
         >
           <Ionicons name="add" size={30} color="white" />
         </TouchableOpacity>
