@@ -2,11 +2,11 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { Tabs } from 'expo-router';
-import Header from '../../components/Header';
+//import Header from '../../components/Header';
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue', header:({options}) => <Header/> }}>
+    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue', headerShown: false /*, header:({options}) => <Header/> */ }}>
       <Tabs.Screen
         name="index"
         options={{
