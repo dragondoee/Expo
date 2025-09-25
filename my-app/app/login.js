@@ -21,7 +21,7 @@ const LoginScreen = () => {
         <View style={styles.container}>
             <View style={styles.loginContainer}>
                 <Text style={styles.title}>Connexion</Text>
-                <Link style={styles.link} href='signup'>Vous n'avez de compte ? S'inscrire</Link>
+                <Link style={styles.link} href='signup'>Vous n&apos;avez de compte ? S&apos;inscrire</Link>
 
                 <Text style={styles.label}>Adresse email :</Text>
                 <TextInput
