@@ -3,11 +3,12 @@ import { StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   return (
-    <SafeAreaView style={{flex:1}}>
-      <StatusBar style="auto"/>
+    <>
+   
+      <StatusBar style="auto" />
 
       <Stack>
         <Stack.Protected guard={!!isLoggedIn}>
@@ -29,6 +30,6 @@ export default function RootLayout() {
         </Stack.Protected>
         
       </Stack>
-    </SafeAreaView>
+       </>
   );
 }

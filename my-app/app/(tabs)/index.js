@@ -3,6 +3,7 @@ import BgImage from '../../components/Theme';
 import { Button } from "@react-navigation/elements";
 import React from "react";
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 
@@ -14,7 +15,8 @@ export default function Index() {
   return (
     <BgImage source={require('../../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
 
-      <View style={{ position: 'absolute', top: 0, left: 0, right: 0, margin: 20, height: '100%' }}>
+
+      <View style={{ position: 'absolute', top: 0, left: 0, right: 0, margin: 20, height: '100%', marginTop: 50 }}>
         <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20, color: 'white' }}>Mes Notes</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12, justifyContent: 'space-between' }}>
