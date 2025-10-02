@@ -54,17 +54,18 @@ export default function Index() {
           left: 0,
           zIndex: 10,
         }}>
-          <View style={{ display: 'flex', flexDirection: 'row', width: '100%', backgroundColor: '#f0f0f0cd', height: 50 }}>
-            <TouchableOpacity onPress={() => setShowNote(false)} style={{ padding: 10 }}>
-              <Ionicons name="arrow-back" size={24} color="#2196F3"/>
-            </TouchableOpacity>
-            <TextInput
-              placeholder="Écrivez votre titre"
-              style={{
-                padding: 10,
-                width: '100%',
-              }}
-            />
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', width: '100%', backgroundColor: '#f0f0f0cd', height: 90, paddingBottom: 5 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 15, gap: 10 }}>
+              <TouchableOpacity onPress={() => setShowNote(false)} >
+                <Ionicons name="arrow-back" size={24} color="#2196F3"/>
+              </TouchableOpacity>
+              <TextInput
+                placeholder="Écrivez votre titre"
+                style={{
+                  width: '100%',
+                }}
+              />
+            </View>
           </View>
           <TextInput
             value={note}
