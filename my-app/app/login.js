@@ -11,22 +11,40 @@ const LoginScreen = () => {
 
 
     const handleLogin = async () => {
-        
         if (!email || !password) {
             Alert.alert('Erreur', 'Veuillez remplir tous les champs.');
             return;
-        };
+        }
 
-        const { ok, data } = await api.post("/user/login", {email:email, password:password});
-        if (!ok) return console.log("error fetching lists");
-        setUser(data);
+        try {
+            const response = await api.post("/user/login", { email, password });
 
-        
-        Alert.alert('Connexion', `Email: ${email}\nPassword: ${password}`);
-        window.location.href = "/";
+            console.log("[LOGIN RESPONSE]", response);
 
-        
+            // Si l'appel n'est pas "ok"
+            if (!response.ok || response.status !== 200) {
+            // Erreur 401 → mauvais identifiants
+            if (response.status === 401) {
+                Alert.alert('Erreur', 'Adresse email ou mot de passe incorrect.');
+            } else {
+                // Autre erreur (serveur, réseau…)
+                Alert.alert('Erreur', `Problème de connexion (${response.status})`);
+            }
+            return;
+            }
+
+            // Si tout est bon
+            const userData = response.data || {};
+            setUser(userData);
+
+            Alert.alert('Connexion réussie', `Bienvenue ${userData.first_name || email}!`);
+
+        } catch (error) {
+            console.error("Erreur login:", error);
+            Alert.alert('Erreur', 'Impossible de se connecter au serveur.');
+        }
     };
+
 
 
     return (

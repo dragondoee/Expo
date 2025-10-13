@@ -124,9 +124,9 @@ router.post("/login", async (req, res) => {
         message: "Email or password is invalid",
       });
 
-    const match =
-      config.ENVIRONMENT === "development" ||
-      (await user.comparePassword(password));
+    const match = await user.comparePassword(password);
+      // config.ENVIRONMENT === "development" || (await user.comparePassword(password));
+     
     if (!match)
       return res.status(401).send({
         ok: false,
@@ -147,6 +147,12 @@ router.post("/login", async (req, res) => {
     return res.status(500).send({ ok: false, code: "SERVER_ERROR" });
   }
 });
+
+// ===================================== UPDATE =====================================
+
+
+// ===================================== DELETE =====================================
+
 
 
 module.exports = router;
