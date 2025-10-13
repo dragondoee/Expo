@@ -10,8 +10,8 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: '#e91e63',
         headerShown: false,
-        tabBarStyle: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, zIndex: 10 },
-        tabBarLabelStyle: { fontSize: 12, marginBottom: 5, color: 'black', },
+        tabBarStyle: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 105, zIndex: 10, borderTopLeftRadius: 15, borderTopRightRadius: 15, paddingBottom: 30},
+        tabBarLabelStyle: { fontSize: 12, paddingBottom: 25, color: 'black' },
         tabBarItemStyle: { marginTop: 5 },  
         }}
     >
