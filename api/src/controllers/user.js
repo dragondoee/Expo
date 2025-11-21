@@ -150,44 +150,9 @@ router.post("/login", async (req, res) => {
 
 // ===================================== UPDATE =====================================
 
-router.put('/update/:id', async(req,res) => {
-    try {
-        const user = await UserObject.findById(req.params.id);
-
-        if(!user)
-        {
-          return res.status(404).send({ ok:false, code:'user not found'});
-        }
-
-        user.set(req.body);
-        await user.save();
-
-        return res.status(200).send({ ok:true, user});
-    } catch (error){
-        console.log(error);
-        res.status(500).send({ ok:false, code:SERVEUR_ERROR, error});
-    }
-});
 
 // ===================================== DELETE =====================================
 
-router.delete('/delete/:id', async(req,res) => {
-    try {
-        const user = await UserObject.findById(req.params.id);
-
-        if(!user)
-        {
-          return res.status(404).send({ ok:false, code:'user not found'});
-        }
-
-        await user.remove();
-        return res.status(200).send({ ok:true, user});
-        
-    } catch (error){
-        console.log(error);
-        res.status(500).send({ ok:false, code:SERVER_ERROR, error});
-    }
-});
 
 
 module.exports = router;
