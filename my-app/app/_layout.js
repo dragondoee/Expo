@@ -1,9 +1,10 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import useAuthStore from "../store/authStore";
 
 export default function RootLayout() {
-  const isLoggedIn = true;
+  const isLoggedIn = useAuthStore(state => state.isLoggedIn);
 
   return (
     <>
@@ -11,7 +12,7 @@ export default function RootLayout() {
       <StatusBar style="auto" />
 
       <Stack>
-        <Stack.Protected guard={!!isLoggedIn}>
+        <Stack.Protected guard={isLoggedIn}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
         </Stack.Protected>
 

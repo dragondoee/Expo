@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
+import useAuthStore from "../store/authStore";
 import BgImage from '../components/Theme';
 import {Link} from'expo-router';
 import api from "../services/api";
@@ -7,8 +8,7 @@ import api from "../services/api";
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [user, setUser] = useState([]);
-
+    const { setUser, setToken, setIsLoggedIn } = useAuthStore();
 
     const handleLogin = async () => {
         if (!email || !password) {
@@ -19,33 +19,23 @@ const LoginScreen = () => {
         try {
             const response = await api.post("/user/login", { email, password });
 
-            console.log("[LOGIN RESPONSE]", response);
-
-            // Si l'appel n'est pas "ok"
-            if (!response.ok || response.status !== 200) {
-            // Erreur 401 → mauvais identifiants
-            if (response.status === 401) {
-                Alert.alert('Erreur', 'Adresse email ou mot de passe incorrect.');
-            } else {
-                // Autre erreur (serveur, réseau…)
-                Alert.alert('Erreur', `Problème de connexion (${response.status})`);
-            }
+            if (response.status !== 200) {
+            Alert.alert('Erreur', 'Identifiants incorrects');
             return;
             }
 
-            // Si tout est bon
-            const userData = response.data || {};
-            setUser(userData);
+            const userData = response;
 
-            Alert.alert('Connexion réussie', `Bienvenue ${userData.first_name || email}!`);
+            // 🔥 Store les infos dans Zustand (persistées dans AsyncStorage)
+            setUser(userData.data);
+            setToken(userData.token);
+            setIsLoggedIn(true);
 
         } catch (error) {
             console.error("Erreur login:", error);
-            Alert.alert('Erreur', 'Impossible de se connecter au serveur.');
+            Alert.alert("Erreur login:", error.message);
         }
     };
-
-
 
     return (
         <BgImage source={require('../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
