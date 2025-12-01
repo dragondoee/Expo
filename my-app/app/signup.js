@@ -1,33 +1,58 @@
-import React from "react";
-import { StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-native";
+import { React, useState } from "react";
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import useAuthStore from "../store/authStore";
+import api from "../services/api";
 import BgImage from '../components/Theme';
 import {Link} from'expo-router';
 
-// fetch('http://localhost:8081/user/login', {
-//         method: 'POST',
-//         headers: {
-//             Accept: 'application/json',
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//             email: 'yourValue',
-//             first_name: 'yourOtherValue',
-//             last_name: 'yourOtherValue',
-//             password: 'yourOtherValue',
-//             cpassword: 'yourOtherValue',
-//         }),
-//     });
-
 
 // Formulaire d'inscription
-const SignupForm = ({
-  email,
-  setEmail,
-  password,
-  setPassword,
-  confirmPassword,
-  setConfirmPassword,
-}) => {
+const SignupForm = () => {
+  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const { setUser, setToken, setIsLoggedIn } = useAuthStore();
+
+  const handleSignup = async () => {
+    if (!email || !password || !confirmPassword) {
+        Alert.alert('Erreur', 'Veuillez remplir tous les champs.');
+        return;
+    }
+
+    try {
+        const response = await api.post("/user/signup", {
+          email,
+          first_name: firstName,
+          last_name: lastName,
+          password,
+          cpassword: confirmPassword,
+        });
+
+        if (!response.data.ok) {
+          Alert.alert("Erreur", response.data.message || "Erreur d'inscription");
+          return;
+        }
+      const { token, data } = response.data;
+
+      setUser(data);
+      setToken(token);
+      setIsLoggedIn(true);
+
+      Alert.alert("Inscription réussie", `Bienvenue ${data.first_name}!`);
+
+    } catch (error) {
+      console.log("Erreur signup:", error.response?.data);
+
+      Alert.alert(
+        "Erreur",
+        error.response?.data?.message || "Erreur pendant l'inscription"
+      );
+    }
+  };
+
   return (
     <BgImage source={require('../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
     <View style={styles.container}>
@@ -36,10 +61,20 @@ const SignupForm = ({
         <Link style={styles.link} href='login'>Vous avez un compte ? Se connecter</Link>
 
         <Text style={styles.label}>Prénom :</Text>
-        <TextInput style={styles.input} placeholder="Prénom" />
+        <TextInput 
+        style={styles.input} 
+        placeholder="Prénom"
+        value={firstName}
+        onChangeText={setFirstName}
+        />
 
         <Text style={styles.label}>Nom :</Text>
-        <TextInput style={styles.input} placeholder="Nom" />
+        <TextInput 
+        style={styles.input} 
+        placeholder="Nom"
+        value={lastName}
+        onChangeText={setLastName}
+        />
 
         <Text style={styles.label}>Email :</Text>
         <TextInput
@@ -68,7 +103,7 @@ const SignupForm = ({
           onChangeText={setConfirmPassword}
         />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleSignup}>
           <Text style={styles.buttonText}>S&#39;inscrire</Text>
         </TouchableOpacity>
       </View>
