@@ -2,24 +2,43 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
 import BgImage from '../../components/Theme';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import useAuthStore from "../../store/authStore";
+import { Button } from '@react-navigation/elements';
 
 export default function Profil() {
-  const user={prenom:'Ana',nom:'Deschamps',email:'ana.deschamps@gmail.com'};
+  const user= useAuthStore(state => state.user);
+  const logout = useAuthStore(state => state.logout);
+  
+  const editUser = () => {
+    // Logic to edit user profile
+  };
+  const deleteUser = () => {
+    // Logic to delete user profile
+  };
+
   return (
     <BgImage source={require('../../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
     <View style={styles.container}>
       <View style={styles.loginContainer}>
 
         <MaterialCommunityIcons style={styles.imageAccount} name="account-circle" size={60} />
-        <Text style={styles.title}>Profil</Text>
+        <Text style={styles.title}>Profile</Text>
 
         <Text style={styles.label}>Identité</Text>
-        <Text>{user.prenom} {user.nom}</Text>
+        <Text>{user.first_name} {user.last_name}</Text>
 
         <Text style={styles.label}>Adresse email</Text>
         <Text>{user.email}</Text>
 
+        <View>
+          <Button onPress={editUser}> Modifier </Button> {/* styliser + icon */}
+          <Button onPress={deleteUser}> Supprimer </Button> {/* styliser + icon */}
+        </View>
+
       </View>
+
+      <Button onPress={logout}> Se déconnecter </Button> {/* styliser + icon */}
+
     </View>
     </BgImage>
   );
