@@ -2,8 +2,9 @@ import { useState } from "react";
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
 import useAuthStore from "../store/authStore";
 import BgImage from '../components/Theme';
-import {Link} from'expo-router';
+import { Link } from 'expo-router';
 import api from "../services/api";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('');
@@ -20,8 +21,8 @@ const LoginScreen = () => {
             const response = await api.post("/user/login", { email, password });
 
             if (response.status !== 200) {
-            Alert.alert('Erreur', 'Identifiants incorrects');
-            return;
+                Alert.alert('Erreur', 'Identifiants incorrects');
+                return;
             }
 
             const userData = response;
@@ -39,35 +40,41 @@ const LoginScreen = () => {
 
     return (
         <BgImage source={require('../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
-        <View style={styles.container}>
-            <View style={styles.loginContainer}>
-                <Text style={styles.title}>Connexion</Text>
-                <Link style={styles.link} href='signup'>Vous n&apos;avez de compte ? S&apos;inscrire</Link>
+            <KeyboardAwareScrollView
+                style={{ flex: 1 }}
+                contentContainerStyle={styles.container}
+                keyboardShouldPersistTaps="handled"
+            >
+                <View style={styles.container}>
+                    <View style={styles.loginContainer}>
+                        <Text style={styles.title}>Connexion</Text>
+                        <Link style={styles.link} href='signup'>Vous n&apos;avez de compte ? S&apos;inscrire</Link>
 
-                <Text style={styles.label}>Adresse email :</Text>
-                <TextInput
-                    style={styles.input}
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    placeholder="Entrez votre email"
-                />
+                        <Text style={styles.label}>Adresse email :</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={email}
+                            onChangeText={setEmail}
+                            keyboardType="email-address"
+                            autoCapitalize="none"
+                            placeholder="Entrez votre email"
+                        />
 
-                <Text style={styles.label}>Mot de passe :</Text>
-                <TextInput
-                    style={styles.input}
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry
-                    placeholder="Entrez votre mot de passe"
-                />
+                        <Text style={styles.label}>Mot de passe :</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={password}
+                            onChangeText={setPassword}
+                            secureTextEntry
+                            placeholder="Entrez votre mot de passe"
+                        />
 
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Se connecter</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
+                        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                            <Text style={styles.buttonText}>Se connecter</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </KeyboardAwareScrollView>
         </BgImage>
     );
 };
@@ -98,10 +105,10 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     link: {
-        fontSize:13,
-        textAlign:'center',
-        textDecorationLine:'underline',
-        textDecorationColor:"#e75480",
+        fontSize: 13,
+        textAlign: 'center',
+        textDecorationLine: 'underline',
+        textDecorationColor: "#e75480",
     },
     label: {
         fontWeight: "bold",

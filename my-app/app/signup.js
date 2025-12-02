@@ -3,7 +3,8 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from "reac
 import useAuthStore from "../store/authStore";
 import api from "../services/api";
 import BgImage from '../components/Theme';
-import {Link} from'expo-router';
+import { Link } from 'expo-router';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 
 // Formulaire d'inscription
@@ -18,23 +19,23 @@ const SignupForm = () => {
 
   const handleSignup = async () => {
     if (!email || !password || !confirmPassword) {
-        Alert.alert('Erreur', 'Veuillez remplir tous les champs.');
-        return;
+      Alert.alert('Erreur', 'Veuillez remplir tous les champs.');
+      return;
     }
 
     try {
-        const response = await api.post("/user/signup", {
-          email,
-          first_name: firstName,
-          last_name: lastName,
-          password,
-          cpassword: confirmPassword,
-        });
+      const response = await api.post("/user/signup", {
+        email,
+        first_name: firstName,
+        last_name: lastName,
+        password,
+        cpassword: confirmPassword,
+      });
 
-        if (!response.data.ok) {
-          Alert.alert("Erreur", response.data.message || "Erreur d'inscription");
-          return;
-        }
+      if (!response.data.ok) {
+        Alert.alert("Erreur", response.data.message || "Erreur d'inscription");
+        return;
+      }
       const { token, data } = response.data;
 
       setUser(data);
@@ -55,59 +56,66 @@ const SignupForm = () => {
 
   return (
     <BgImage source={require('../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
-    <View style={styles.container}>
-      <View style={styles.signupContainer}>
-        <Text style={styles.title}>Inscription</Text>
-        <Link style={styles.link} href='login'>Vous avez un compte ? Se connecter</Link>
+      <KeyboardAwareScrollView
+        enableOnAndroid
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={40}
+      >
+        <View style={styles.container}>
+          <View style={styles.signupContainer}>
+            <Text style={styles.title}>Inscription</Text>
+            <Link style={styles.link} href='login'>Vous avez un compte ? Se connecter</Link>
 
-        <Text style={styles.label}>Prénom :</Text>
-        <TextInput 
-        style={styles.input} 
-        placeholder="Prénom"
-        value={firstName}
-        onChangeText={setFirstName}
-        />
+            <Text style={styles.label}>Prénom :</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Prénom"
+              value={firstName}
+              onChangeText={setFirstName}
+            />
 
-        <Text style={styles.label}>Nom :</Text>
-        <TextInput 
-        style={styles.input} 
-        placeholder="Nom"
-        value={lastName}
-        onChangeText={setLastName}
-        />
+            <Text style={styles.label}>Nom :</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Nom"
+              value={lastName}
+              onChangeText={setLastName}
+            />
 
-        <Text style={styles.label}>Email :</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-        />
+            <Text style={styles.label}>Email :</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+            />
 
-        <Text style={styles.label}>Mot de passe :</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Mot de passe"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
+            <Text style={styles.label}>Mot de passe :</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Mot de passe"
+              secureTextEntry
+              value={password}
+              onChangeText={setPassword}
+            />
 
-        <Text style={styles.label}>Confirmer le mot de passe :</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Confirmer le mot de passe"
-          secureTextEntry
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-        />
+            <Text style={styles.label}>Confirmer le mot de passe :</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Confirmer le mot de passe"
+              secureTextEntry
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+            />
 
-        <TouchableOpacity style={styles.button} onPress={handleSignup}>
-          <Text style={styles.buttonText}>S&#39;inscrire</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+            <TouchableOpacity style={styles.button} onPress={handleSignup}>
+              <Text style={styles.buttonText}>S&#39;inscrire</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </KeyboardAwareScrollView>
     </BgImage>
   );
 };
@@ -137,10 +145,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   link: {
-      fontSize:13,
-      textAlign:'center',
-      textDecorationLine:'underline',
-      textDecorationColor:"#e75480",
+    fontSize: 13,
+    textAlign: 'center',
+    textDecorationLine: 'underline',
+    textDecorationColor: "#e75480",
   },
   label: {
     fontWeight: "bold",

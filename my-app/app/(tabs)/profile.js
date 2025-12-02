@@ -46,13 +46,13 @@ export default function Profil() {
           <Text>{user.email}</Text>
 
           <View>
-            <Button onPress={editUser}> Modifier </Button> {/* styliser + icon */}
-            <Button onPress={deleteUser}> Supprimer </Button> {/* styliser + icon */}
+            <Button onPress={editUser}> Modifier </Button>
+            <Button onPress={deleteUser}> Supprimer </Button>
           </View>
 
         </View>
 
-        <Button onPress={logout}> Se déconnecter </Button> {/* styliser + icon */}
+        <Button onPress={logout}> Se déconnecter </Button>
 
       </View>
     </BgImage>
