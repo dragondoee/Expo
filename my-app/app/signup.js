@@ -32,17 +32,17 @@ const SignupForm = () => {
         cpassword: confirmPassword,
       });
 
-      if (!response.data.ok) {
+      if (response.data.ok === false) {
         Alert.alert("Erreur", response.data.message || "Erreur d'inscription");
         return;
       }
-      const { token, data } = response.data;
+      const userData = response;
 
-      setUser(data);
-      setToken(token);
+      setUser(userData.data);
+      setToken(userData.token);
       setIsLoggedIn(true);
 
-      Alert.alert("Inscription réussie", `Bienvenue ${data.first_name}!`);
+      Alert.alert("Inscription réussie", `Bienvenue ${userData.data.first_name}!`);
 
     } catch (error) {
       console.log("Erreur signup:", error.response?.data);

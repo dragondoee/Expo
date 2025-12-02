@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, Alert } from 'react-native';
 import BgImage from '../../components/Theme';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import useAuthStore from "../../store/authStore";

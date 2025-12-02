@@ -27,7 +27,6 @@ const LoginScreen = () => {
 
             const userData = response;
 
-            // 🔥 Store les infos dans Zustand (persistées dans AsyncStorage)
             setUser(userData.data);
             setToken(userData.token);
             setIsLoggedIn(true);

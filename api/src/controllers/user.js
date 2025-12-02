@@ -86,7 +86,7 @@ router.post("/signup", async (req, res) => {
         message: "Email is invalid",
       });
 
-    const user = await UserObject.insertOne({ email: email, first_name: first_name, last_name: last_name, password: password });
+    const user = await UserObject.create({ email: email, first_name: first_name, last_name: last_name, password: password });
 
     user.set({ last_login_at: Date.now() });
     await user.save();
