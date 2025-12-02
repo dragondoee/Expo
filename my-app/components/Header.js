@@ -11,7 +11,7 @@ export default function Header({ title = "Tutiger Do List" }) {
 const styles = StyleSheet.create({
   container: {
     height: Platform.OS === 'ios' ? 44 + 20 : 56, // 20 pour la status bar iOS
-    paddingTop: Platform.OS === 'ios' ? 20 : 0, 
+    paddingTop: Platform.OS === 'ios' ? 20 : 0,
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: Platform.OS === 'ios' ? 'center' : 'flex-start',

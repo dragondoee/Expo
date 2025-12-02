@@ -10,6 +10,6 @@ module.exports = {
     ENVIRONMENT,
 };
 
-function getEnvironment(){
+function getEnvironment() {
     return process.env.ENVIRONMENT || "development";
 };

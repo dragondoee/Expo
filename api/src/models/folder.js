@@ -5,11 +5,11 @@ const MODELNAME = 'folder';
 
 const Schema = new mongoose.Schema(
     {
-        user_id:{type:ObjectId},
-        name:{type: String}
+        user_id: { type: ObjectId },
+        name: { type: String }
     },
-    { timestamps: true}
+    { timestamps: true }
 )
 
-const OBJ=  mongoose.model(MODELNAME, Schema);
+const OBJ = mongoose.model(MODELNAME, Schema);
 module.exports = OBJ;

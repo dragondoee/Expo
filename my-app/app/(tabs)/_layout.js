@@ -10,10 +10,10 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: '#e91e63',
         headerShown: false,
-        tabBarStyle: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 105, zIndex: 10, borderTopLeftRadius: 15, borderTopRightRadius: 15, paddingBottom: 30},
+        tabBarStyle: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 105, zIndex: 10, borderTopLeftRadius: 15, borderTopRightRadius: 15, paddingBottom: 30 },
         tabBarLabelStyle: { fontSize: 12, paddingBottom: 25, color: 'black' },
-        tabBarItemStyle: { marginTop: 5 },  
-        }}
+        tabBarItemStyle: { marginTop: 5 },
+      }}
     >
       <Tabs.Screen
         name="index"

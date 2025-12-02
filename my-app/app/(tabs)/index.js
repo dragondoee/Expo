@@ -117,7 +117,7 @@ export default function Index() {
 
   return (
     <BgImage source={require("../../assets/images/bg.png")} style={styles.container}>
-      
+
       {/* 2. Contenu de la liste des notes */}
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.mainContent}>
@@ -137,7 +137,7 @@ export default function Index() {
       </SafeAreaView>
 
       {/* 3. Bouton Flottant (position absolute par rapport au conteneur racine) */}
-       <TouchableOpacity
+      <TouchableOpacity
         onPress={openNote}
         style={styles.addButtonContainer}
         activeOpacity={0.8}
@@ -146,7 +146,7 @@ export default function Index() {
           <Ionicons name="add" size={30} color="white" />
         </View>
       </TouchableOpacity>
-      
+
       {/* 4. Modale (Rendue en dernier avec zIndex très élevé) */}
       {showNote && (
         <SafeAreaView style={styles.noteModalOverlay}>

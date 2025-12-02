@@ -15,7 +15,7 @@ export default function Profil() {
   };
   const deleteUser = async () => {
     try {
-      const response = await api.delete("/user/"+user._id);
+      const response = await api.delete("/user/" + user._id);
 
       if (response.status !== 200) {
         Alert.alert('Erreur', 'Erreur lors de la suppression du compte');

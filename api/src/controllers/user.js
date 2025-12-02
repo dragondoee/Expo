@@ -14,54 +14,54 @@ const SERVEUR_ERROR = 'SERVEUR_ERROR';
 
 // ===================================== GET =====================================
 
-router.get('/all', async(req,res) => {
-    try {
-        const users = await UserObject.find();
+router.get('/all', async (req, res) => {
+  try {
+    const users = await UserObject.find();
 
-        if(!users)
-            return res.status(404).send({ ok:false, code:'user not found'});
+    if (!users)
+      return res.status(404).send({ ok: false, code: 'user not found' });
 
-        return res.status(200).send({ ok:true, users});
-    } catch (error){
-        console.log(error);
-        res.status(500).send({ ok:false, code:SERVEUR_ERROR, error});
-    }
+    return res.status(200).send({ ok: true, users });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+  }
 });
 
-router.get('/email/:email', async(req,res) => {
-    try {
-        const user = await UserObject.findOne({email:req.params.email});
+router.get('/email/:email', async (req, res) => {
+  try {
+    const user = await UserObject.findOne({ email: req.params.email });
 
-        if(!user)
-            return res.status(404).send({ ok:false, code:'user not found'});
+    if (!user)
+      return res.status(404).send({ ok: false, code: 'user not found' });
 
-        return res.status(200).send({ ok:true, user});
-    } catch (error){
-        console.log(error);
-        res.status(500).send({ ok:false, code:SERVEUR_ERROR, error});
-    }
+    return res.status(200).send({ ok: true, user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+  }
 });
 
-router.get('/:id', async(req,res) => {
-    try {
-        const user = await UserObject.findById(req.params.id);
+router.get('/:id', async (req, res) => {
+  try {
+    const user = await UserObject.findById(req.params.id);
 
-        if(!user)
-            return res.status(404).send({ ok:false, code:'user not found'});
+    if (!user)
+      return res.status(404).send({ ok: false, code: 'user not found' });
 
-        return res.status(200).send({ ok:true, user});
-    } catch (error){
-        console.log(error);
-        res.status(500).send({ ok:false, code:SERVEUR_ERROR, error});
-    }
+    return res.status(200).send({ ok: true, user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+  }
 });
 
 // ===================================== POST =====================================
 
 // SIGNUP
 router.post("/signup", async (req, res) => {
-    let { email, first_name, last_name, password, cpassword } = req.body;
-    email = (email || "").trim().toLowerCase();
+  let { email, first_name, last_name, password, cpassword } = req.body;
+  email = (email || "").trim().toLowerCase();
 
   if (!email || !password || !cpassword)
     return res.status(400).send({
@@ -86,7 +86,7 @@ router.post("/signup", async (req, res) => {
         message: "Email is invalid",
       });
 
-    const user = await UserObject.insertOne({email:email, first_name:first_name, last_name:last_name, password:password});
+    const user = await UserObject.insertOne({ email: email, first_name: first_name, last_name: last_name, password: password });
 
     user.set({ last_login_at: Date.now() });
     await user.save();
@@ -125,8 +125,8 @@ router.post("/login", async (req, res) => {
       });
 
     const match = await user.comparePassword(password);
-      // config.ENVIRONMENT === "development" || (await user.comparePassword(password));
-     
+    // config.ENVIRONMENT === "development" || (await user.comparePassword(password));
+
     if (!match)
       return res.status(401).send({
         ok: false,
@@ -153,18 +153,18 @@ router.post("/login", async (req, res) => {
 
 // ===================================== DELETE =====================================
 
-router.delete('/:id', async(req,res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const user = await UserObject.findByIdAndDelete(req.params.id);
 
-    if(!user)
-      return res.status(404).send({ ok:false, code:'user not found'});    
-    
-    return res.status(200).send({ ok:true, message:'user deleted'});
+    if (!user)
+      return res.status(404).send({ ok: false, code: 'user not found' });
 
-  } catch (error){
-        console.log(error);
-        res.status(500).send({ ok:false, code:SERVEUR_ERROR, error});
+    return res.status(200).send({ ok: true, message: 'user deleted' });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
   }
 });
 

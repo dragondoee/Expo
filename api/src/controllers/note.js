@@ -15,67 +15,67 @@ const SERVEUR_ERROR = 'SERVEUR_ERROR';
 
 // ===================================== GET ======================================
 
-router.get('/all', async(req,res) => {
+router.get('/all', async (req, res) => {
     try {
         const notes = await UserObject.find();
-        if(!notes)
-            return res.status(404).send({ ok:false, code:'note not found'});
-        return res.send({ ok:true, notes });
+        if (!notes)
+            return res.status(404).send({ ok: false, code: 'note not found' });
+        return res.send({ ok: true, notes });
     } catch (error) {
         console.error(error);
-        return res.status(500).send({ ok:false, code:SERVEUR_ERROR });
+        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
     }
 });
-router.get('/:id', async(req,res) => {
+router.get('/:id', async (req, res) => {
     try {
         const note = await UserObject.findById(req.params.id);
-        if(!note)
-            return res.status(404).send({ ok:false, code:'note not found'});
-        return res.send({ ok:true, note });
+        if (!note)
+            return res.status(404).send({ ok: false, code: 'note not found' });
+        return res.send({ ok: true, note });
     } catch (error) {
         console.error(error);
-        return res.status(500).send({ ok:false, code:SERVEUR_ERROR });
+        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
     }
 });
 
 // ===================================== POST =====================================
 
-router.post('/create', async(req,res) => {
+router.post('/create', async (req, res) => {
     try {
         const { title, content, folderId } = req.body;
         const newNote = new UserObject({ title, content, folderId });
         await newNote.save();
-        return res.send({ ok:true, note: newNote });
+        return res.send({ ok: true, note: newNote });
     } catch (error) {
         console.error(error);
-        return res.status(500).send({ ok:false, code:SERVEUR_ERROR });
+        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
     }
 });
 
-router.post('/update/:id', async(req,res) => {
+router.post('/update/:id', async (req, res) => {
     try {
         const { title, content, folderId } = req.body;
         const updatedNote = await UserObject.findByIdAndUpdate(req.params.id, { title, content, folderId }, { new: true });
-        if(!updatedNote)
-            return res.status(404).send({ ok:false, code:'note not found'});
-        return res.send({ ok:true, note: updatedNote });
+        if (!updatedNote)
+            return res.status(404).send({ ok: false, code: 'note not found' });
+        return res.send({ ok: true, note: updatedNote });
     } catch (error) {
         console.error(error);
-        return res.status(500).send({ ok:false, code:SERVEUR_ERROR });
+        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
     }
 });
 
 // ===================================== DELETE =====================================
 
-router.delete('/delete/:id', async(req,res) => {
+router.delete('/delete/:id', async (req, res) => {
     try {
         const deletedNote = await UserObject.findByIdAndDelete(req.params.id);
-        if(!deletedNote)
-            return res.status(404).send({ ok:false, code:'note not found'});
-        return res.send({ ok:true, note: deletedNote });
+        if (!deletedNote)
+            return res.status(404).send({ ok: false, code: 'note not found' });
+        return res.send({ ok: true, note: deletedNote });
     } catch (error) {
         console.error(error);
-        return res.status(500).send({ ok:false, code:SERVEUR_ERROR });
+        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
     }
 });
 
