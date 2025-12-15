@@ -1,22 +1,24 @@
-import React from "react"
-import { ImageBackground, StyleSheet } from "react-native"
+import React from 'react';
+import { ImageBackground, StyleSheet, View } from 'react-native';
 
 const BgImage = ({ source, children, style }) => (
-  <ImageBackground
-    source={require("../assets/images/bg.png")}
-    style={[styles.background, style]}
-    resizeMode="cover"
-    pointerEvents="box-none"
-  >
-    {children}
-  </ImageBackground>
-)
+    <ImageBackground source={source} style={[styles.background, style]}>
+        <View style={styles.overlay}>
+            {children}
+        </View>
+    </ImageBackground>
+);
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    position: "relative",
-  }
-})
+    background: {
+        flex: 1,
+        resizeMode: 'cover',
+    },
+    overlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+});
 
-export default BgImage
+export default BgImage;

@@ -1,7 +1,5 @@
 import { Platform } from "react-native";
-// eslint-disable-next-line import/no-unresolved
 import * as Application from "expo-application";
-// eslint-disable-next-line import/no-unresolved
 import { getCalendars } from "expo-localization";
 
 import { API_HOST } from "../config";

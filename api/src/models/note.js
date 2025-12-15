@@ -4,8 +4,8 @@ const MODELNAME = 'note';
 
 const Schema = new mongoose.Schema(
     {
-        user_id: { type: ObjectId },
-        folder_id: { type: ObjectId },
+        user_id: { type: mongoose.Types.ObjectId },
+        folder_id: { type: mongoose.Types.ObjectId },
         title: { type: String, trim: true },
         text: { type: String },
         datcre: { type: Date, default: Date.now },

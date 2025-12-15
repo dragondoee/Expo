@@ -3,8 +3,8 @@ import BgImage from "../../components/Theme"
 import React, { useEffect, useState } from "react"
 import { Ionicons } from "@expo/vector-icons"
 import { SafeAreaView } from "react-native-safe-area-context"
-import api from "../../services/api" // Import de votre service API
-import { useIsFocused } from "@react-navigation/native" // Pour rafraîchir quand on revient sur l'écran
+import api from "../../services/api" 
+import { useIsFocused } from "@react-navigation/native" 
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -107,8 +107,8 @@ export default function Index() {
   const [showNote, setShowNote] = useState(false)
   const [noteContent, setNoteContent] = useState("")
   const [title, setTitle] = useState("")
-  const [notes, setNotes] = useState([]) // État pour stocker les notes
-  const isFocused = useIsFocused(); // Hook pour savoir si l'écran est actif
+  const [notes, setNotes] = useState([])
+  const isFocused = useIsFocused();
 
   // Charger les notes au démarrage et à chaque fois que l'écran devient actif
   useEffect(() => {
@@ -119,9 +119,10 @@ export default function Index() {
 
   const fetchNotes = async () => {
     try {
-      const res = await api.get('/note/all'); // Appel à votre route backend
-      if (res.ok) {
-        setNotes(res.notes);
+      const res = await api.get('/note/all');
+
+      if (res.data.ok) {
+        setNotes(res.data.notes);
       }
     } catch (e) {
       console.log("Erreur chargement notes", e);
@@ -143,14 +144,13 @@ export default function Index() {
 
     try {
       // Envoi des données au backend
-      // Le backend attend { title, content } dans le body (voir contrôleur corrigé)
       const res = await api.post('/note/create', { 
-        title: title || "Sans titre", 
-        content: noteContent 
-      });
-      
-      if (res.ok) {
-        await fetchNotes(); // Recharger la liste
+      title: title || "Sans titre", 
+      content: noteContent 
+    });
+
+      if (res.data.ok) {
+        await fetchNotes();
         closeNote();
       } else {
         alert("Erreur lors de la sauvegarde");
@@ -173,9 +173,8 @@ export default function Index() {
               {notes.map((item) => (
                 <TouchableOpacity key={item._id} style={styles.noteWrapper}>
                   <View style={styles.noteCard}>
-                    {/* On affiche un aperçu du texte (item.text car c'est le champ en BDD) */}
                     <Text numberOfLines={6} style={styles.noteContentPreview}>
-                      {item.text}
+                      {item.content}
                     </Text>
                   </View>
                   <Text numberOfLines={1} style={styles.noteTitleText}>
@@ -195,11 +194,22 @@ export default function Index() {
       </TouchableOpacity>
 
       {showNote && (
-        <SafeAreaView style={styles.noteModalOverlay}>
-          <View style={styles.noteModalHeader}>
-            <View style={styles.headerControls}>
-              <TouchableOpacity onPress={closeNote}>
-                <Ionicons name="arrow-back" size={24} color="#2196F3" />
+        <View style={{
+          backgroundColor: 'white',
+          shadowColor: '#000',
+          shadowOpacity: 0.2,
+          shadowRadius: 5,
+          width: '100%',
+          height: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          zIndex: 10,
+        }}>
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', width: '100%', backgroundColor: '#f0f0f0cd', height: 90, paddingBottom: 5 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 15, gap: 10 }}>
+              <TouchableOpacity onPress={() => setShowNote(false)} >
+                <Ionicons name="arrow-back" size={24} color="#2196F3"/>
               </TouchableOpacity>
               <TextInput 
                 placeholder="Titre..." 
@@ -207,7 +217,7 @@ export default function Index() {
                 value={title} 
                 style={styles.titleInput} 
               />
-              {/* Bouton Sauvegarder ajouté */}
+              {/* Bouton Sauvegarder */}
               <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
                 <Text style={{color: 'white', fontWeight: 'bold'}}>OK</Text>
               </TouchableOpacity>
@@ -221,8 +231,31 @@ export default function Index() {
             multiline 
             style={styles.noteInput} 
           />
-        </SafeAreaView>
-      )}
+        </View>)}
+      <View style={{
+        position: 'absolute',
+        bottom: 30,
+        right: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        display: 'flex',
+      }}>
+        <TouchableOpacity
+          onPress={() => setShowNote(true)}
+          style={{
+            borderRadius: 50,
+            padding: 20,
+            width: 70,
+            height: 70,
+            backgroundColor: '#2196F3',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: 100,
+            }}
+        >
+          <Ionicons name="add" size={30} color="white" />
+        </TouchableOpacity>
+      </View>
     </BgImage>
-  )
+  );
 }
