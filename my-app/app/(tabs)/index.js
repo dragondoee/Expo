@@ -170,11 +170,17 @@ export default function Index() {
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.notesGrid}>
               {/* Affichage dynamique des notes */}
+              {notes.length === 0 && (
+                <Text style={{ color: 'white', opacity: 0.7 }}>
+                  Aucune note pour le moment
+                </Text>
+              )}
+
               {notes.map((item) => (
                 <TouchableOpacity key={item._id} style={styles.noteWrapper}>
                   <View style={styles.noteCard}>
                     <Text numberOfLines={6} style={styles.noteContentPreview}>
-                      {item.content}
+                      {item.text}
                     </Text>
                   </View>
                   <Text numberOfLines={1} style={styles.noteTitleText}>
@@ -232,30 +238,6 @@ export default function Index() {
             style={styles.noteInput} 
           />
         </View>)}
-      <View style={{
-        position: 'absolute',
-        bottom: 30,
-        right: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        display: 'flex',
-      }}>
-        <TouchableOpacity
-          onPress={() => setShowNote(true)}
-          style={{
-            borderRadius: 50,
-            padding: 20,
-            width: 70,
-            height: 70,
-            backgroundColor: '#2196F3',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginBottom: 100,
-            }}
-        >
-          <Ionicons name="add" size={30} color="white" />
-        </TouchableOpacity>
-      </View>
     </BgImage>
   );
 }
