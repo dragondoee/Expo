@@ -29,6 +29,12 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <MaterialCommunityIcons name="account-circle" size={24} color="black" />,
         }}
       />
+      <Tabs.Screen
+        name="editProfile"
+        options={{
+          href:null,
+        }}
+      />
     </Tabs>
   );
 }

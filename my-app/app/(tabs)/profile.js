@@ -1,34 +1,13 @@
-import { StyleSheet, Text, View, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import BgImage from '../../components/Theme';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import useAuthStore from "../../store/authStore";
 import { Button } from '@react-navigation/elements';
-import api from "../../services/api";
+import { Link } from 'expo-router';
 
 export default function Profil() {
   const user = useAuthStore(state => state.user);
   const logout = useAuthStore(state => state.logout);
-
-  const editUser = async () => {
-    // Logic to edit user profile
-  };
-  const deleteUser = async () => {
-    try {
-      const response = await api.delete("/user/" + user._id);
-
-      if (response.status !== 200) {
-        Alert.alert('Erreur', 'Erreur lors de la suppression du compte');
-        return;
-      }
-
-      Alert.alert('Succès', 'Compte supprimé avec succès');
-      logout();
-
-    } catch (error) {
-      console.error("Erreur login:", error);
-      Alert.alert("Erreur login:", error.message);
-    }
-  };
 
   return (
     <BgImage source={require('../../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
@@ -44,10 +23,10 @@ export default function Profil() {
           <Text style={styles.label}>Adresse email</Text>
           <Text>{user.email}</Text>
 
-          <View>
-            <Button onPress={editUser}> Modifier </Button>
-            <Button onPress={deleteUser}> Supprimer </Button>
-          </View>
+          <TouchableOpacity style={styles.button}>
+            <Link style={styles.link} href='editProfile'>Modifier le profil</Link>
+          </TouchableOpacity>
+
 
         </View>
 
@@ -90,6 +69,16 @@ const styles = StyleSheet.create({
   imageAccount: {
     color: "#e75480",
     textAlign: "center",
+  },
+  button: {
+    backgroundColor: "white",
+    borderWidth: 1.5,
+    borderColor: "#e75480",
+    paddingHorizontal: 13,
+    paddingVertical: 9,
+    borderRadius: 5,
+    marginTop: 16,
+    alignSelf: "flex-end", // remplace width: fit-content
   },
 });
 
