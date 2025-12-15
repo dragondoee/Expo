@@ -150,6 +150,19 @@ router.post("/login", async (req, res) => {
 
 // ===================================== UPDATE =====================================
 
+router.put('/:id', async (req, res) => {
+  try {
+    const updates = req.body;
+    const user = await UserObject.findByIdAndUpdate(req.params.id, updates, { new: true });
+
+    if (!user)
+      return res.status(404).send({ ok: false, code: 'user not found' });
+    return res.status(200).send({ ok: true, data : user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+  }
+});
 
 // ===================================== DELETE =====================================
 
