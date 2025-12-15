@@ -17,6 +17,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/user', require('./controllers/user'));
 
+app.use('/note', require('./controllers/note'));
+
 app.get('/', (req, res) => {
   res.send('Hello World! - API - LAST DEPLOY:' + new Date().toISOString());
 });

@@ -16,16 +16,16 @@ const SERVEUR_ERROR = 'SERVEUR_ERROR';
 // ===================================== GET ======================================
 
 router.get('/all', async (req, res) => {
+    console.log("[API] Récupération de toutes les notes");
     try {
         const notes = await UserObject.find();
-        if (!notes)
-            return res.status(404).send({ ok: false, code: 'note not found' });
         return res.send({ ok: true, notes });
     } catch (error) {
         console.error(error);
         return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
     }
 });
+
 router.get('/:id', async (req, res) => {
     try {
         const note = await UserObject.findById(req.params.id);
@@ -41,21 +41,28 @@ router.get('/:id', async (req, res) => {
 // ===================================== POST =====================================
 
 router.post('/create', async (req, res) => {
+    console.log("[API] Tentative de création de note :", req.body); 
     try {
-        const { title, content, folderId } = req.body;
-        const newNote = new UserObject({ title, content, folderId });
+        const { title, content } = req.body;
+        
+        const newNote = new UserObject({ 
+            title, 
+            text: content, 
+        });
+        
         await newNote.save();
+        console.log("[API] Note sauvegardée avec succès !");
         return res.send({ ok: true, note: newNote });
     } catch (error) {
-        console.error(error);
+        console.error("[API] Erreur création :", error);
         return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
     }
 });
 
 router.post('/update/:id', async (req, res) => {
     try {
-        const { title, content, folderId } = req.body;
-        const updatedNote = await UserObject.findByIdAndUpdate(req.params.id, { title, content, folderId }, { new: true });
+        const { title, content } = req.body;
+        const updatedNote = await UserObject.findByIdAndUpdate(req.params.id, { title, text: content }, { new: true });
         if (!updatedNote)
             return res.status(404).send({ ok: false, code: 'note not found' });
         return res.send({ ok: true, note: updatedNote });
