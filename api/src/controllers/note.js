@@ -15,7 +15,7 @@ const SERVEUR_ERROR = 'SERVEUR_ERROR';
 
 // ===================================== GET ======================================
 
-router.get('/all', async (req, res) => {
+router.get('/all', passport.authenticate('admin', { session: false }), async (req, res) => {
     console.log("[API] Récupération de toutes les notes");
     try {
         const notes = await UserObject.find({});
@@ -28,7 +28,7 @@ router.get('/all', async (req, res) => {
 });
 
 /* récupérer les notes de l'utilisateur connecté */
-router.get('/user/:user_id', async (req, res) => {
+router.get('/user/:user_id', passport.authenticate('user', { session: false }), async (req, res) => {
     console.log("[API] Récupération des notes de l'utilisateur :", req.params.user_id);
     try {
         const notes = await UserObject.find({ user_id: req.params.user_id });
@@ -41,7 +41,7 @@ router.get('/user/:user_id', async (req, res) => {
 });
 
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
     try {
         const note = await UserObject.findById(req.params.id);
         if (!note)
@@ -55,7 +55,7 @@ router.get('/:id', async (req, res) => {
 
 // ===================================== POST =====================================
 
-router.post('/create', async (req, res) => {
+router.post('/create', passport.authenticate('user', { session: false }), async (req, res) => {
     console.log("[API] Tentative de création de note :", req.body); 
     try {
         const { title, content, user_id } = req.body;
@@ -75,7 +75,9 @@ router.post('/create', async (req, res) => {
     }
 });
 
-router.put('/:id', async (req, res) => {
+// ===================================== UPDATE =====================================
+
+router.put('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
     try {
         const { title, content } = req.body;
         const updatedNote = await UserObject.findByIdAndUpdate(req.params.id, { title, text: content }, { new: true });
@@ -90,7 +92,7 @@ router.put('/:id', async (req, res) => {
 
 // ===================================== DELETE =====================================
 
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/delete/:id', passport.authenticate('user', { session: false }), async (req, res) => {
     try {
         const deletedNote = await UserObject.findByIdAndDelete(req.params.id);
         if (!deletedNote)
