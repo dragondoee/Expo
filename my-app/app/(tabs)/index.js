@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react"
 import { Ionicons } from "@expo/vector-icons"
 import { SafeAreaView } from "react-native-safe-area-context"
 import api from "../../services/api" 
-import { useIsFocused } from "@react-navigation/native" 
+import { useIsFocused } from "@react-navigation/native"
+import useAuthStore from "../../store/authStore" 
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -108,20 +109,25 @@ export default function Index() {
   const [noteContent, setNoteContent] = useState("")
   const [title, setTitle] = useState("")
   const [notes, setNotes] = useState([])
-  const [userId, setUserId] = useState("default_user")
+  
+  // 2. On récupère l'utilisateur connecté depuis le store global
+  const user = useAuthStore((state) => state.user)
   const isFocused = useIsFocused();
 
-  // Charger les notes au démarrage et à chaque fois que l'écran devient actif
   useEffect(() => {
-    if(isFocused) {
+    // On ne charge les notes que si l'écran est actif ET qu'on a un utilisateur
+    if(isFocused && user) {
       fetchNotes();
     }
-  }, [isFocused]);
+  }, [isFocused, user]);
 
   const fetchNotes = async () => {
-    try {
-      const res = await api.get(`note/user/${userId}`);
+    // Sécurité : si pas d'utilisateur, on ne fait rien
+    if (!user || !user._id) return;
 
+    try {
+      // 3. On utilise l'ID réel de l'utilisateur connecté
+      const res = await api.get(`/note/user/${user._id}`);
       if (res.ok) {
         setNotes(res.notes);
       }
@@ -136,20 +142,21 @@ export default function Index() {
     setShowNote(true)
   }
 
-  const closeNote = () => {
-    setShowNote(false)
-  }
+  const closeNote = () => setShowNote(false)
 
   const handleSave = async () => {
-    if (!title && !noteContent) return closeNote(); // Ne pas sauvegarder si vide
+    if (!title && !noteContent) return closeNote();
+    if (!user || !user._id) {
+        alert("Vous devez être connecté pour sauvegarder une note");
+        return;
+    }
 
     try {
-      // Envoi des données au backend
       const res = await api.post('/note/create', { 
-      title: title || "Sans titre", 
-      content: noteContent,
-      user_id: userId
-    });
+        title: title || "Sans titre", 
+        content: noteContent,
+        user_id: user._id 
+      });
 
       if (res.ok) {
         await fetchNotes();

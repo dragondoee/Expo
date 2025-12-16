@@ -29,6 +29,7 @@ router.get('/all', async (req, res) => {
 
 /* récupérer les notes de l'utilisateur connecté */
 router.get('/user/:user_id', async (req, res) => {
+    console.log("[API] Récupération des notes de l'utilisateur :", req.params.user_id);
     try {
         const notes = await UserObject.find({ user_id: req.params.user_id });
         return res.send({ ok: true, notes });
@@ -36,7 +37,7 @@ router.get('/user/:user_id', async (req, res) => {
     catch (error) {
         console.error(error);
         return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
-    }   
+    }
 });
 
 
