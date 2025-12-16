@@ -24,7 +24,8 @@ const styles = StyleSheet.create({
   notesGrid: { 
     flexDirection: "row", 
     flexWrap: "wrap", 
-    justifyContent: "space-between" 
+    justifyContent: "space-between", 
+    marginBottom: "30%"
   },  
   noteWrapper: { 
     width: "45%", 
@@ -153,6 +154,12 @@ export default function Index() {
     setShowNote(true)
   }
 
+  const clearNote = () => {
+    setNoteContent("")
+    setTitle("")
+    setUpdateNoteId(null)
+  }
+
   // sauvegarde (création ou mise à jour)
   const handleSave = async () => {
     if (!title && !noteContent) return closeNote()
@@ -197,6 +204,28 @@ export default function Index() {
     }
   }
 
+  // suppression d'une note
+  const handleDelete = async () => {
+    if (!updateNoteId) return
+    
+    if (!confirm("Êtes-vous sûr de vouloir supprimer cette note ?")) return
+
+    try {
+      const res = await api.delete(`/note/${updateNoteId}`)
+      
+      if (res.ok) {
+        await fetchNotes()
+        closeNote()
+        clearNote()
+      } else {
+        alert("Erreur lors de la suppression")
+      }
+    } catch (e) {
+      console.error(e)
+      alert("Erreur réseau")
+    }
+  }
+
   return (
     <BgImage source={require("../../assets/images/bg.png")} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
@@ -215,7 +244,7 @@ export default function Index() {
               {notes.map((item) => (
                 <TouchableOpacity key={item._id} style={styles.noteWrapper}>
                   <TouchableOpacity style={styles.noteCard} onPress={() => updateNote(item)}>
-                    <Text numberOfLines={6} style={styles.noteContentPreTouchableOpacity}>
+                    <Text numberOfLines={6} style={styles.noteContentPreview}>
                       {item.text}
                     </Text>
                   </TouchableOpacity>
@@ -263,6 +292,12 @@ export default function Index() {
               <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
                 <Text style={{color: 'white', fontWeight: 'bold'}}>OK</Text>
               </TouchableOpacity>
+              {/* Bouton Supprimer */}
+              {updateNoteId && (
+                <TouchableOpacity onPress={handleDelete} style={styles.saveButton}>
+                  <Ionicons name="trash" size={20} color="white" />
+                </TouchableOpacity>
+              )}
             </View>
           </View>
 
