@@ -2,7 +2,6 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { Tabs } from 'expo-router';
-//import Header from '../../components/Header';
 
 export default function TabLayout() {
   return (
