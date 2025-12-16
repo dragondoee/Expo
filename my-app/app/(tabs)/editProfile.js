@@ -30,25 +30,24 @@ const EditProfileForm = () => {
         last_name: lastName,
       });
 
-      if (response.data.ok === false) {
-        Alert.alert("Erreur", response.data.message || "Erreur lors de la modification du profil");
+      if (response.ok === false) {
+        console.log("Erreur :", response);
+        Alert.alert("Erreur modification", response.error || "Erreur lors de la modification du profil");
         return;
       }
       const userData = response;
 
       setUser(userData.data);
-      setToken(userData.token);
-      setIsLoggedIn(true);
 
       Alert.alert("Modification du profil", `Profil modifié avec succès !`);
       router.push("/profile");
 
     } catch (error) {
-      console.log("Erreur update:", error.response?.code || error.message);
+      console.log("Erreur update:", error.message);
 
       Alert.alert(
         "Erreur",
-        error.response?.data?.message || "Erreur lors de la modification du profil"
+        "Erreur lors de la modification du profil"
       );
     }
   };

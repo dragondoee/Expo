@@ -14,7 +14,7 @@ const SERVEUR_ERROR = 'SERVEUR_ERROR';
 
 // ===================================== GET =====================================
 
-router.get('/all', async (req, res) => {
+router.get('/all', passport.authenticate('admin', { session: false }), async (req, res) => {
   try {
     const users = await UserObject.find();
 
@@ -28,21 +28,7 @@ router.get('/all', async (req, res) => {
   }
 });
 
-router.get('/email/:email', async (req, res) => {
-  try {
-    const user = await UserObject.findOne({ email: req.params.email });
-
-    if (!user)
-      return res.status(404).send({ ok: false, code: 'user not found' });
-
-    return res.status(200).send({ ok: true, user });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
-  }
-});
-
-router.get('/:id', async (req, res) => {
+router.get('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
   try {
     const user = await UserObject.findById(req.params.id);
 
@@ -150,7 +136,7 @@ router.post("/login", async (req, res) => {
 
 // ===================================== UPDATE =====================================
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
   try {
     const updates = req.body;
     const user = await UserObject.findByIdAndUpdate(req.params.id, updates, { new: true });
@@ -166,7 +152,7 @@ router.put('/:id', async (req, res) => {
 
 // ===================================== DELETE =====================================
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
   try {
     const user = await UserObject.findByIdAndDelete(req.params.id);
 
