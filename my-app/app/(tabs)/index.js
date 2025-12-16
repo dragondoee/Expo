@@ -121,8 +121,8 @@ export default function Index() {
     try {
       const res = await api.get('/note/all');
 
-      if (res.data.ok) {
-        setNotes(res.data.notes);
+      if (res.ok) {
+        setNotes(res.notes);
       }
     } catch (e) {
       console.log("Erreur chargement notes", e);
@@ -149,7 +149,7 @@ export default function Index() {
       content: noteContent 
     });
 
-      if (res.data.ok) {
+      if (res.ok) {
         await fetchNotes();
         closeNote();
       } else {

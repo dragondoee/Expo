@@ -74,10 +74,10 @@ const EditProfileForm = () => {
   return (
     <BgImage source={require('../../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
       <KeyboardAwareScrollView
-        enableOnAndroid
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
         extraScrollHeight={40}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1 }}
       >
         <Link href="profile" style={{ ...styles.button, position: 'absolute', top: 40, left: 20, zIndex: 1 }}>
           Retour
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-    imageAccount: {
+  imageAccount: {
     color: "#e75480",
     textAlign: "center",
   },

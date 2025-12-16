@@ -40,9 +40,10 @@ const LoginScreen = () => {
     return (
         <BgImage source={require('../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
             <KeyboardAwareScrollView
-                style={{ flex: 1 }}
-                contentContainerStyle={styles.container}
+                enableOnAndroid={true}
+                extraScrollHeight={0}
                 keyboardShouldPersistTaps="handled"
+                contentContainerStyle={{ flexGrow: 1 }}
             >
                 <View style={styles.container}>
                     <View style={styles.loginContainer}>
