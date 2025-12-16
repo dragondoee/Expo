@@ -120,7 +120,7 @@ export default function Index() {
 
   const fetchNotes = async () => {
     try {
-      const res = await api.get(`note/user/${userId}`);
+      const res = await api.get(`/note/user/${userId}`);
 
       if (res.ok) {
         setNotes(res.notes);
