@@ -24,11 +24,10 @@ const styles = StyleSheet.create({
   notesGrid: { 
     flexDirection: "row", 
     flexWrap: "wrap", 
-    gap: 12, 
     justifyContent: "space-between" 
   },  
   noteWrapper: { 
-    width: "30%", 
+    width: "45%", 
     marginBottom: 10 
   },
   noteCard: { 
@@ -50,7 +49,7 @@ const styles = StyleSheet.create({
     position: "absolute", 
     bottom: 150, 
     right: 20,
-    zIndex: 20,
+    zIndex: 5,
     elevation: 20
   },
   addButton: { 
@@ -68,7 +67,7 @@ const styles = StyleSheet.create({
     width: "100%", 
     height: "100%", 
     top: 0, 
-    left: 0 
+    left: 0, 
   },
   noteModalHeader: { 
     flexDirection: "row", 
@@ -109,13 +108,15 @@ export default function Index() {
   const [noteContent, setNoteContent] = useState("")
   const [title, setTitle] = useState("")
   const [notes, setNotes] = useState([])
+  const [updateNoteId, setUpdateNoteId] = useState(null)
+
   
   // 2. On récupère l'utilisateur connecté depuis le store global
   const user = useAuthStore((state) => state.user)
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    // On ne charge les notes que si l'écran est actif ET qu'on a un utilisateur
+    // On ne charge les notes que si l'écran est actif ET qu'on a un utilisateur connecté
     if(isFocused && user) {
       fetchNotes();
     }
@@ -144,29 +145,55 @@ export default function Index() {
 
   const closeNote = () => setShowNote(false)
 
+  // mise à jour d'une note existante
+  const updateNote = async (note) => {
+    setNoteContent(note.text)
+    setTitle(note.title)
+    setUpdateNoteId(note._id)
+    setShowNote(true)
+  }
+
+  // sauvegarde (création ou mise à jour)
   const handleSave = async () => {
-    if (!title && !noteContent) return closeNote();
+    if (!title && !noteContent) return closeNote()
     if (!user || !user._id) {
-        alert("Vous devez être connecté pour sauvegarder une note");
-        return;
+      alert("Vous devez être connecté pour sauvegarder une note")
+      return
     }
 
     try {
-      const res = await api.post('/note/create', { 
-        title: title || "Sans titre", 
-        content: noteContent,
-        user_id: user._id 
-      });
-
-      if (res.ok) {
-        await fetchNotes();
-        closeNote();
+      if (updateNoteId) {
+        // Mise à jour d'une note existante
+        const res = await api.put(`/note/${updateNoteId}`, { 
+          title: title || "Sans titre", 
+          content: noteContent
+        })
+        
+        if (res.ok) {
+          await fetchNotes()
+          closeNote()
+          setUpdateNoteId(null)
+        } else {
+          alert("Erreur lors de la mise à jour")
+        }
       } else {
-        alert("Erreur lors de la sauvegarde");
+        // Création d'une nouvelle note
+        const res = await api.post('/note/create', { 
+          title: title || "Sans titre", 
+          content: noteContent,
+          user_id: user._id 
+        })
+
+        if (res.ok) {
+          await fetchNotes()
+          closeNote()
+        } else {
+          alert("Erreur lors de la sauvegarde")
+        }
       }
     } catch (e) {
-      console.error(e);
-      alert("Erreur réseau");
+      console.error(e)
+      alert("Erreur réseau")
     }
   }
 
@@ -187,11 +214,11 @@ export default function Index() {
 
               {notes.map((item) => (
                 <TouchableOpacity key={item._id} style={styles.noteWrapper}>
-                  <View style={styles.noteCard}>
-                    <Text numberOfLines={6} style={styles.noteContentPreview}>
+                  <TouchableOpacity style={styles.noteCard} onPress={() => updateNote(item)}>
+                    <Text numberOfLines={6} style={styles.noteContentPreTouchableOpacity}>
                       {item.text}
                     </Text>
-                  </View>
+                  </TouchableOpacity>
                   <Text numberOfLines={1} style={styles.noteTitleText}>
                     {item.title}
                   </Text>

@@ -75,17 +75,22 @@ router.post('/create', async (req, res) => {
     }
 });
 
+// ===================================== PUT ======================================
 router.put('/:id', async (req, res) => {
     try {
         const { title, content } = req.body;
-        const updatedNote = await UserObject.findByIdAndUpdate(req.params.id, { title, text: content }, { new: true });
+        const updatedNote = await UserObject.findByIdAndUpdate(
+            req.params.id,
+            { title, text: content },
+            { new: true }
+        );
         if (!updatedNote)
             return res.status(404).send({ ok: false, code: 'note not found' });
         return res.send({ ok: true, note: updatedNote });
     } catch (error) {
         console.error(error);
         return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
-    }
+    }   
 });
 
 // ===================================== DELETE =====================================
