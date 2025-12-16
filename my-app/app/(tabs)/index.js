@@ -9,18 +9,19 @@ import useAuthStore from "../../store/authStore"
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  safeArea: { flex: 1 },
+  safeArea: { 
+    flex: 1,
+    width: "100%",
+   },
   mainContent: { 
     marginTop: 50, 
-    flex: 1, 
-    borderColor: "red",
-    borderWidth: 2,
-    width: "100%",
+    flex: 1,
+    paddingHorizontal: 30
   },
   headerText: { 
     fontSize: 24, 
     fontWeight: "bold", 
-    marginBottom: 20, 
+    marginBottom: 40, 
     color: "white" 
   },
   notesGrid: { 
