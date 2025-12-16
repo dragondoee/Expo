@@ -96,7 +96,7 @@ router.put('/:id', passport.authenticate('user', { session: false }), async (req
 
 // ===================================== DELETE =====================================
 
-router.delete('/delete/:id', passport.authenticate('user', { session: false }), async (req, res) => {
+router.delete('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
     try {
         const deletedNote = await UserObject.findByIdAndDelete(req.params.id);
         if (!deletedNote)

@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, TextInput, StyleSheet, ScrollView } from "react-native"
+import { Text, View, TouchableOpacity, TextInput, StyleSheet, ScrollView, Alert } from "react-native"
 import BgImage from "../../components/Theme"
 import React, { useEffect, useState } from "react"
 import { Ionicons } from "@expo/vector-icons"
@@ -11,9 +11,11 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   safeArea: { flex: 1 },
   mainContent: { 
-    marginHorizontal: 20, 
     marginTop: 50, 
-    flex: 1 
+    flex: 1, 
+    borderColor: "red",
+    borderWidth: 2,
+    width: "100%",
   },
   headerText: { 
     fontSize: 24, 
@@ -206,26 +208,40 @@ export default function Index() {
   }
 
   // suppression d'une note
-  const handleDelete = async () => {
-    if (!updateNoteId) return
-    
-    if (!confirm("Êtes-vous sûr de vouloir supprimer cette note ?")) return
+  const handleDelete = () => {
+    if (!updateNoteId) return;
 
-    try {
-      const res = await api.delete(`/note/${updateNoteId}`)
-      
-      if (res.ok) {
-        await fetchNotes()
-        closeNote()
-        clearNote()
-      } else {
-        alert("Erreur lors de la suppression")
-      }
-    } catch (e) {
-      console.error(e)
-      alert("Erreur réseau")
-    }
-  }
+    Alert.alert(
+      "Supprimer la note",
+      "Êtes-vous sûr de vouloir supprimer cette note ?",
+      [
+        {
+          text: "Annuler",
+          style: "cancel"
+        },
+        {
+          text: "Supprimer",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              const res = await api.delete(`/note/${updateNoteId}`);
+              
+              if (res.ok) {
+                await fetchNotes();
+                closeNote();
+                clearNote();
+              } else {
+                alert("Erreur lors de la suppression");
+              }
+            } catch (e) {
+              console.error(e);
+              alert("Erreur réseau");
+            }
+          }
+        }
+      ]
+    );
+  };
 
   return (
     <BgImage source={require("../../assets/images/bg.png")} style={styles.container}>
