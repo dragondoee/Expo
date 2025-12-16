@@ -45,11 +45,11 @@ const SignupForm = () => {
       Alert.alert("Inscription réussie", `Bienvenue ${userData.data.first_name}!`);
 
     } catch (error) {
-      console.log("Erreur signup:", error.response?.data);
+      console.log("Erreur signup:", error.message);
 
       Alert.alert(
         "Erreur",
-        error.response?.data?.message || "Erreur pendant l'inscription"
+        error.message || "Erreur pendant l'inscription"
       );
     }
   };
@@ -57,10 +57,10 @@ const SignupForm = () => {
   return (
     <BgImage source={require('../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
       <KeyboardAwareScrollView
-        enableOnAndroid
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled"
+        enableOnAndroid={true}
         extraScrollHeight={40}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ flexGrow: 1 }}
       >
         <View style={styles.container}>
           <View style={styles.signupContainer}>
