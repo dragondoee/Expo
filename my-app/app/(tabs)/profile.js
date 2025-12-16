@@ -4,6 +4,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import useAuthStore from "../../store/authStore";
 import { Button } from '@react-navigation/elements';
 import { Link } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function Profil() {
   const user = useAuthStore(state => state.user);
@@ -15,7 +16,7 @@ export default function Profil() {
         <View style={styles.loginContainer}>
 
           <MaterialCommunityIcons style={styles.imageAccount} name="account-circle" size={60} />
-          <Text style={styles.title}>Profile</Text>
+          <Text style={styles.title}>Profil</Text>
 
           <Text style={styles.label}>Identité</Text>
           <Text>{user.first_name} {user.last_name}</Text>
@@ -30,7 +31,10 @@ export default function Profil() {
 
         </View>
 
-        <Button onPress={logout}> Se déconnecter </Button>
+        <TouchableOpacity onPress={logout} style={styles.deconnect}> 
+            <Text style={styles.deconnectText}>Se déconnecter </Text>
+            <Ionicons name="log-out-outline" size={25} color="white"/>
+        </TouchableOpacity>
 
       </View>
     </BgImage>
@@ -77,8 +81,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13,
     paddingVertical: 9,
     borderRadius: 5,
-    marginTop: 16,
-    alignSelf: "flex-end", // remplace width: fit-content
+    marginTop: 32,
+    alignItems: "center", 
+  },
+  link: {
+    color: "#e75480",
+    textDecorationLine: "none",
+  },
+  deconnect: {
+    marginTop: 30,
+    paddingHorizontal: 20,
+    paddingVertical: 6,
+    color: "white",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 5,
+    backgroundColor: "rgba(0, 0, 0, 0.19)",
+    borderRadius: 8,
+  },
+  deconnectText: { 
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 15,
   },
 });
 

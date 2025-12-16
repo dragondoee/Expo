@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     color: "white" 
   },
   notesGrid: { 
+    display: "flex",
     flexDirection: "row", 
     flexWrap: "wrap", 
     justifyContent: "space-between", 

@@ -6,6 +6,7 @@ import BgImage from '../../components/Theme';
 import { Link, router } from 'expo-router';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { Ionicons } from "@expo/vector-icons";
 
 
 // Formulaire modification profile
@@ -14,6 +15,8 @@ const EditProfileForm = () => {
   const [email, setEmail] = useState(user.email);
   const [firstName, setFirstName] = useState(user.first_name);
   const [lastName, setLastName] = useState(user.last_name);
+  const logout = useAuthStore(state => state.logout);
+
 
   const { setUser, setToken, setIsLoggedIn } = useAuthStore();
 
@@ -111,12 +114,14 @@ const EditProfileForm = () => {
               keyboardType="email-address"
             />
 
-            <TouchableOpacity style={styles.button} onPress={handleDelete}>
-              <Text style={styles.buttonText}>Supprimer</Text>
+            <TouchableOpacity style={styles.buttonUpdate} onPress={handleEdit}>
+              <Text style={styles.buttonText}>Modifier</Text>
+              <Ionicons name="pencil-outline" size={20} color="#e75480" />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={handleEdit}>
-              <Text style={styles.buttonText}>Modifier</Text>
+            <TouchableOpacity style={styles.buttonDelete} onPress={handleDelete}>
+              <Text style={{color: "red"}}>Supprimer</Text>
+              <Ionicons name="trash-outline" size={20} color="red" />
             </TouchableOpacity>
           </View>
         </View>
@@ -174,7 +179,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "#fafafaff",
   },
-  button: {
+  buttonUpdate: {
     backgroundColor: "white",
     borderWidth: 1.5,
     borderColor: "#e75480",
@@ -182,7 +187,25 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     borderRadius: 5,
     marginTop: 16,
-    alignSelf: "flex-end", // remplace width: fit-content
+    alignItems: "center", 
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 5,
+  },
+  buttonDelete: {
+    color: "red",
+    /* borderWidth: 1.5,
+    borderColor: "red",
+    paddingHorizontal: 13,
+    paddingVertical: 9,
+    borderRadius: 5, */
+    marginTop: 22,
+    alignItems: "center", 
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 5,
   },
   buttonText: {
     color: "#e75480",
