@@ -24,8 +24,8 @@ export default function Profil() {
           <Text style={styles.label}>Adresse email</Text>
           <Text>{user.email}</Text>
 
-          <TouchableOpacity style={styles.button}>
-            <Link style={styles.link} href='editProfile'>Modifier le profil</Link>
+          <TouchableOpacity>
+            <Link style={styles.button} href='editProfile'>Modifier le profil</Link>
           </TouchableOpacity>
 
 
@@ -82,11 +82,10 @@ const styles = StyleSheet.create({
     paddingVertical: 9,
     borderRadius: 5,
     marginTop: 32,
-    alignItems: "center", 
-  },
-  link: {
-    color: "#e75480",
-    textDecorationLine: "none",
+    margin: "auto",
+    width: "100%",
+    textAlign: "center",
+    color: "#e75480", 
   },
   deconnect: {
     marginTop: 30,
