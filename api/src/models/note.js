@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 
 const MODELNAME = 'note';
 
-const {Schema, Types} = new mongoose.Schema(
+const Schema = new mongoose.Schema(
     {
-        user_id: { type: Types.ObjectId },
+        user_id: { type: String },
         /* folder_id: { type: Types.ObjectId }, */
         title: { type: String, trim: true },
         text: { type: String },
