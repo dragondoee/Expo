@@ -8,7 +8,7 @@ const UserObject = require('../models/note');
 
 const config = require('../config');
 
-const JWT_MAX_AGE = "6m"; // 6 months
+const JWT_MAX_AGE = "100m"; // 100 minutes
 
 const SERVEUR_ERROR = 'SERVEUR_ERROR';
 
