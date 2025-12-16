@@ -18,13 +18,27 @@ const SERVEUR_ERROR = 'SERVEUR_ERROR';
 router.get('/all', async (req, res) => {
     console.log("[API] Récupération de toutes les notes");
     try {
-        const notes = await UserObject.find();
+        const notes = await UserObject.find({});
         return res.send({ ok: true, notes });
-    } catch (error) {
+    }
+    catch (error) {
         console.error(error);
         return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
     }
 });
+
+/* récupérer les notes de l'utilisateur connecté */
+router.get('/user/:user_id', async (req, res) => {
+    try {
+        const notes = await UserObject.find({ user_id: req.params.user_id });
+        return res.send({ ok: true, notes });
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
+    }   
+});
+
 
 router.get('/:id', async (req, res) => {
     try {
@@ -43,9 +57,10 @@ router.get('/:id', async (req, res) => {
 router.post('/create', async (req, res) => {
     console.log("[API] Tentative de création de note :", req.body); 
     try {
-        const { title, content } = req.body;
+        const { title, content, user_id } = req.body;
         
-        const newNote = new UserObject({ 
+        const newNote = new UserObject({
+            user_id: user_id,
             title, 
             text: content, 
         });
@@ -59,7 +74,7 @@ router.post('/create', async (req, res) => {
     }
 });
 
-router.post('/update/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
         const { title, content } = req.body;
         const updatedNote = await UserObject.findByIdAndUpdate(req.params.id, { title, text: content }, { new: true });

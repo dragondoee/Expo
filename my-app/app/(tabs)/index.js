@@ -108,6 +108,7 @@ export default function Index() {
   const [noteContent, setNoteContent] = useState("")
   const [title, setTitle] = useState("")
   const [notes, setNotes] = useState([])
+  const [userId, setUserId] = useState("default_user")
   const isFocused = useIsFocused();
 
   // Charger les notes au démarrage et à chaque fois que l'écran devient actif
@@ -119,7 +120,7 @@ export default function Index() {
 
   const fetchNotes = async () => {
     try {
-      const res = await api.get('/note/all');
+      const res = await api.get(`note/user/${userId}`);
 
       if (res.ok) {
         setNotes(res.notes);
@@ -146,7 +147,8 @@ export default function Index() {
       // Envoi des données au backend
       const res = await api.post('/note/create', { 
       title: title || "Sans titre", 
-      content: noteContent 
+      content: noteContent,
+      user_id: userId
     });
 
       if (res.ok) {
