@@ -126,7 +126,7 @@ export default function Index() {
     if (!user || !user._id) return;
 
     try {
-      const res = await api.get(`/note/user/${user._id}`);
+      const res = await api.get(`/note/user/all`);
       if (res.ok) {
         setNotes(res.notes);
       }
@@ -175,7 +175,7 @@ export default function Index() {
     try {
       if (updateNoteId) {
         // Mise à jour d'une note existante
-        const res = await api.put(`/note/${updateNoteId}`, { 
+        const res = await api.put(`/note/user/${updateNoteId}`, { 
           title: title || "Sans titre", 
           content: noteContent
         })
@@ -203,8 +203,8 @@ export default function Index() {
         }
       }
     } catch (e) {
-      console.error(e)
-      alert("Erreur réseau")
+      console.error("Erreur mise à jour :", e);
+      alert("Erreur mise à jour :", e.message);
     }
   }
 
@@ -225,7 +225,7 @@ export default function Index() {
           style: "destructive",
           onPress: async () => {
             try {
-              const res = await api.delete(`/note/${updateNoteId}`);
+              const res = await api.delete(`/note/user/${updateNoteId}`);
               
               if (res.ok) {
                 await fetchNotes();
@@ -235,8 +235,8 @@ export default function Index() {
                 alert("Erreur lors de la suppression");
               }
             } catch (e) {
-              console.error(e);
-              alert("Erreur réseau");
+              console.error("Erreur mise à jour :", e);
+              alert("Erreur mise à jour :", e.message);
             }
           }
         }

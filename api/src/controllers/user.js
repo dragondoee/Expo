@@ -18,7 +18,7 @@ router.get('/all', passport.authenticate('admin', { session: false }), async (re
   try {
     const users = await UserObject.find();
 
-    if (!users)
+    if (!users || users.length === 0)
       return res.status(404).send({ ok: false, code: 'user not found' });
 
     return res.status(200).send({ ok: true, users });
