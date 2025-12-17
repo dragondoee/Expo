@@ -5,6 +5,7 @@ import useAuthStore from "../../store/authStore";
 import { Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
+
 export default function Profil() {
   const user = useAuthStore(state => state.user);
   const logout = useAuthStore(state => state.logout);
@@ -26,7 +27,6 @@ export default function Profil() {
           <TouchableOpacity>
             <Link style={styles.button} href='editProfile'>Modifier le profil</Link>
           </TouchableOpacity>
-
 
         </View>
 

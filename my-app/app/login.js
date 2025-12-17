@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, Alert } from 'react-native';
+import { Alert } from 'react-native';
 import useAuthStore from "../store/authStore";
 import api from "../services/api";
 import ButtonComponent from "../components/Button";

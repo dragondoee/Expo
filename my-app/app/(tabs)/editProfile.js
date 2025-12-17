@@ -1,13 +1,11 @@
 import { useState } from "react";
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { StyleSheet, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import useAuthStore from "../../store/authStore";
 import api from "../../services/api";
-import BgImage from '../../components/Theme';
-import { Link, router } from 'expo-router';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { router } from 'expo-router';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Ionicons } from "@expo/vector-icons";
-
+import ScreenContainer from '../../components/Container';
 
 // Formulaire modification profile
 const EditProfileForm = () => {
@@ -88,23 +86,12 @@ const EditProfileForm = () => {
   };
 
   return (
-    <BgImage source={require('../../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
-      
-      <KeyboardAwareScrollView
-        enableOnAndroid={true}
-        extraScrollHeight={40}
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
-        
-        <View style={styles.container}>
-
-          <Link href="profile" style={styles.backButton}>
+    
+    <ScreenContainer backlink={"profile"} style={{marginTop: "-20%"}}>
+        {/* <Link href="profile" style={styles.backButton}>
           <Ionicons name="arrow-back-outline" size={16} color="white" />
             Retour
-        </Link>
-
-          <View style={styles.signupContainer}>
+        </Link> */}
             <MaterialCommunityIcons style={styles.imageAccount} name="account-edit" size={60} />
             <Text style={styles.title}>Modifier le profil</Text>
 
@@ -143,46 +130,14 @@ const EditProfileForm = () => {
               <Text style={{color: "red"}}>Supprimer</Text>
               <Ionicons name="trash-outline" size={20} color="red" />
             </TouchableOpacity>
-          </View>
-        </View>
-      </KeyboardAwareScrollView>
-    </BgImage>
+    </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    /* justifyContent: "center", */
-    alignItems: "center",
-    marginTop: "20%",
-  },
   imageAccount: {
     color: "#e75480",
     textAlign: "center",
-  },
-  backButton: {
-    marginRight: "auto",
-    zIndex: 1,
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
-    backgroundColor: '#00000034',
-    padding: 8,
-    borderRadius: 5,
-    marginBottom: 20,
-  },
-  signupContainer: {
-    width: 320,
-    paddingVertical: 24,
-    paddingHorizontal: 24,
-    backgroundColor: "#ffffffd2",
-    borderRadius: 8,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
   },
   title: {
     textAlign: "center",
