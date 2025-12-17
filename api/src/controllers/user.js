@@ -46,24 +46,24 @@ router.get('/:id', passport.authenticate('user', { session: false }), async (req
 
 // SIGNUP
 router.post("/signup", async (req, res) => {
-  let { email, first_name, last_name, password, cpassword, role } = req.body;
-  email = (email || "").trim().toLowerCase();
-
-  if (!email || !password || !cpassword)
-    return res.status(400).send({
-      ok: false,
-      code: "EMAIL_AND_PASSWORD_REQUIRED",
-      message: "Email and password are required",
-    });
-
-  if (password != cpassword)
-    return res.status(401).send({
-      ok: false,
-      code: "PASSWORDS_UNMATCH",
-      message: "passwords are unmatched",
-    });
-
   try {
+    let { email, first_name, last_name, password, cpassword, role } = req.body;
+    email = (email || "").trim().toLowerCase();
+
+    if (!email || !password || !cpassword)
+      return res.status(400).send({
+        ok: false,
+        code: "EMAIL_AND_PASSWORD_REQUIRED",
+        message: "Email and password are required",
+      });
+
+    if (password != cpassword)
+      return res.status(401).send({
+        ok: false,
+        code: "PASSWORDS_UNMATCH",
+        message: "passwords are unmatched",
+      });
+
 
     if (await UserObject.findOne({ email }))
       return res.status(401).send({
@@ -90,17 +90,17 @@ router.post("/signup", async (req, res) => {
 
 // LOGIN
 router.post("/login", async (req, res) => {
-  let { password, email } = req.body;
-  email = (email || "").trim().toLowerCase();
-
-  if (!email || !password)
-    return res.status(400).send({
-      ok: false,
-      code: "EMAIL_AND_PASSWORD_REQUIRED",
-      message: "Email and password are required",
-    });
-
   try {
+    let { password, email } = req.body;
+    email = (email || "").trim().toLowerCase();
+
+    if (!email || !password)
+      return res.status(400).send({
+        ok: false,
+        code: "EMAIL_AND_PASSWORD_REQUIRED",
+        message: "Email and password are required",
+      });
+
     const user = await UserObject.findOne({ email });
 
     if (!user)
@@ -111,7 +111,6 @@ router.post("/login", async (req, res) => {
       });
 
     const match = await user.comparePassword(password);
-    // config.ENVIRONMENT === "development" || (await user.comparePassword(password));
 
     if (!match)
       return res.status(401).send({
@@ -143,7 +142,7 @@ router.put('/:id', passport.authenticate('user', { session: false }), async (req
 
     if (!user)
       return res.status(404).send({ ok: false, code: 'user not found' });
-    return res.status(200).send({ ok: true, data : user });
+    return res.status(200).send({ ok: true, data: user });
   } catch (error) {
     console.log(error);
     res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
