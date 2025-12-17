@@ -19,7 +19,7 @@ const ScreenContainer = ({ title, link, linkref, children }) => {
                 <View style={styles.container}>
                     <View style={styles.innerContainer}>
 
-                        <Text style={styles.title}>{title}</Text>
+                        {<Text style={styles.title}>{title}</Text>}
                         <Link style={styles.link} href={linkref}>{link}</Link>
                         
                         {children}

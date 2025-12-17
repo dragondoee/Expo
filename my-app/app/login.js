@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { StyleSheet, Text, Alert } from 'react-native';
+import { StyleSheet, Alert } from 'react-native';
 import useAuthStore from "../store/authStore";
-import { Link } from 'expo-router';
 import api from "../services/api";
 import ButtonComponent from "../components/Button";
 import ScreenContainer from '../components/Container';
@@ -39,7 +38,7 @@ const LoginScreen = () => {
     };
 
     return (
-        <ScreenContainer title="Se connecter" link="Vous n&apos;avez de compte ? S&apos;inscrire" linkref="signup">
+        <ScreenContainer title="Se connecter" link="Vous n'avez pas de compte ? S'inscrire" linkref="signup">
             <Input
                 label="Email :"
                 value={email}
@@ -63,19 +62,5 @@ const LoginScreen = () => {
     );
 };
 
-const styles = StyleSheet.create({
-    title: {
-        textAlign: "center",
-        marginBottom: 24,
-        fontSize: 24,
-        fontWeight: "bold",
-    },
-    link: {
-        fontSize: 13,
-        textAlign: 'center',
-        textDecorationLine: 'underline',
-        textDecorationColor: "#e75480",
-    }
-});
 
 export default LoginScreen;

@@ -2,9 +2,9 @@ import { React, useState } from "react";
 import { StyleSheet, Text, TextInput, Alert } from "react-native";
 import useAuthStore from "../store/authStore";
 import api from "../services/api";
-import { Link } from 'expo-router';
 import ButtonComponent from "@/components/Button";
 import ScreenContainer from '../components/Container';
+import Input from "../components/Input";
 
 
 // formulaire d'inscription
@@ -55,52 +55,44 @@ const SignupForm = () => {
   };
 
   return (
-    <ScreenContainer>
-            <Text style={styles.title}>Inscription</Text>
-            <Link style={styles.link} href='login'>Vous avez un compte ? Se connecter</Link>
+    <ScreenContainer title="Inscription" link="Vous avez un compte ? Se connecter" linkref="login">
 
-            <Text style={styles.label}>Prénom :</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Prénom"
+            <Input
+              label="Prénom :"
               value={firstName}
               onChangeText={setFirstName}
+              placeholder="Prénom"
             />
 
-            <Text style={styles.label}>Nom :</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Nom"
+            <Input
+              label="Nom :"
               value={lastName}
               onChangeText={setLastName}
+              placeholder="Nom"
             />
 
-            <Text style={styles.label}>Email :</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
+            <Input
+              label="Email :"
               value={email}
-              
               onChangeText={setEmail}
               keyboardType="email-address"
+              placeholder="Email"
             />
 
-            <Text style={styles.label}>Mot de passe :</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Mot de passe"
-              secureTextEntry
+            <Input
+              label="Mot de passe :"
               value={password}
               onChangeText={setPassword}
+              secureTextEntry
+              placeholder="Mot de passe"
             />
 
-            <Text style={styles.label}>Confirmer le mot de passe :</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Confirmer le mot de passe"
-              secureTextEntry
+            <Input
+              label="Confirmer le mot de passe :"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
+              secureTextEntry
+              placeholder="Confirmer le mot de passe"
             />
 
             <ButtonComponent title="S'inscrire" onPress={handleSignup} />
@@ -109,34 +101,5 @@ const SignupForm = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  title: {
-    textAlign: "center",
-    marginBottom: 24,
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  link: {
-    fontSize: 13,
-    textAlign: 'center',
-    textDecorationLine: 'underline',
-    textDecorationColor: "#e75480",
-  },
-  label: {
-    fontWeight: "bold",
-    color: "#333",
-    marginTop: 12,
-  },
-  input: {
-    width: "100%",
-    padding: 10,
-    marginTop: 3,
-    marginBottom: 20,
-    borderWidth: 1.3,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    backgroundColor: "#fafafaff",
-  },
-});
 
 export default SignupForm;
