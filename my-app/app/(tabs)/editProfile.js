@@ -182,11 +182,6 @@ const styles = StyleSheet.create({
   },
   buttonDelete: {
     color: "red",
-    /* borderWidth: 1.5,
-    borderColor: "red",
-    paddingHorizontal: 13,
-    paddingVertical: 9,
-    borderRadius: 5, */
     marginTop: 22,
     alignItems: "center", 
     display: "flex",

@@ -3,7 +3,7 @@ import { StatusBar } from "react-native";
 import useAuthStore from "../store/authStore";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 
-export default function RootLayout() {
+const RootLayout = () => {
   return (
     <KeyboardProvider>
       <StatusBar style="auto" />
@@ -12,7 +12,10 @@ export default function RootLayout() {
   );
 }
 
-function AppNavigator() {
+export default RootLayout;
+
+
+const AppNavigator = () => {
   const isLoggedIn = useAuthStore(state => state.isLoggedIn);
 
   return (
@@ -37,4 +40,8 @@ function AppNavigator() {
     </Stack>
   );
 }
+
+export { AppNavigator };
+
+
 
