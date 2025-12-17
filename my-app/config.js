@@ -1,3 +1,3 @@
-const API_HOST = "http://10.233.133.85:3000";
+const API_HOST = "https://expo-5afp.onrender.com";
 
 export { API_HOST };
