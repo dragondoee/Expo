@@ -14,20 +14,7 @@ const SERVEUR_ERROR = 'SERVEUR_ERROR';
 
 // ===================================== GET =====================================
 
-router.get('/all', passport.authenticate('admin', { session: false }), async (req, res) => {
-  try {
-    const users = await UserObject.find();
-
-    if (!users || users.length === 0)
-      return res.status(404).send({ ok: false, code: 'user not found' });
-
-    return res.status(200).send({ ok: true, users });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
-  }
-});
-
+// Récupérer les informations de son propre compte
 router.get('/me', passport.authenticate('user', { session: false }), async (req, res) => {
   try {
     const user = await UserObject.findById(req.user._id);
@@ -36,6 +23,20 @@ router.get('/me', passport.authenticate('user', { session: false }), async (req,
       return res.status(404).send({ ok: false, code: 'user not found' });
 
     return res.status(200).send({ ok: true, user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+  }
+});
+
+router.get('/all', passport.authenticate('admin', { session: false }), async (req, res) => {
+  try {
+    const users = await UserObject.find();
+
+    if (!users || users.length === 0)
+      return res.status(404).send({ ok: false, code: 'user not found' });
+
+    return res.status(200).send({ ok: true, users });
   } catch (error) {
     console.log(error);
     res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
@@ -132,7 +133,22 @@ router.post("/login", async (req, res) => {
 
 // ===================================== UPDATE =====================================
 
-router.put('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
+// Mise à jour de son propre compte
+router.put('/me', passport.authenticate('user', { session: false }), async (req, res) => {
+  try {
+    const updates = req.body;
+    const user = await UserObject.findByIdAndUpdate(req.user._id, updates, { new: true });
+
+    if (!user)
+      return res.status(404).send({ ok: false, code: 'user not found' });
+    return res.status(200).send({ ok: true, data: user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+  }
+});
+
+router.put('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
   try {
     const updates = req.body;
     const user = await UserObject.findByIdAndUpdate(req.params.id, updates, { new: true });
@@ -148,7 +164,23 @@ router.put('/:id', passport.authenticate('user', { session: false }), async (req
 
 // ===================================== DELETE =====================================
 
-router.delete('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
+// Suppression de son propre compte
+router.delete('/me', passport.authenticate('user', { session: false }), async (req, res) => {
+  try {
+    const user = await UserObject.findByIdAndDelete(req.user._id);
+
+    if (!user)
+      return res.status(404).send({ ok: false, code: 'user not found' });
+
+    return res.status(200).send({ ok: true, message: 'user deleted' });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+  }
+});
+
+router.delete('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
   try {
     const user = await UserObject.findByIdAndDelete(req.params.id);
 

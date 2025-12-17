@@ -25,7 +25,7 @@ const EditProfileForm = () => {
     }
 
     try {
-      const response = await api.put("/user/" + user._id, {
+      const response = await api.put("/user/me", {
         email,
         first_name: firstName,
         last_name: lastName,
@@ -65,7 +65,7 @@ const EditProfileForm = () => {
           text: "Supprimer",
           onPress: async () => {
           try {
-            const response = await api.delete("/user/" + user._id);
+            const response = await api.delete("/user/me");
 
             if (response.status !== 200) {
               Alert.alert('Erreur', 'Erreur lors de la suppression du compte');
