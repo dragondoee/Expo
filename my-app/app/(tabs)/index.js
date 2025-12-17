@@ -284,59 +284,61 @@ export default Index;
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  safeArea: { 
+  safeArea: {
     flex: 1,
     width: "100%",
-   },
-  mainContent: { 
-    marginTop: 50, 
+  },
+  mainContent: {
+    marginTop: 50,
     flex: 1,
     paddingHorizontal: 30
   },
-  headerText: { 
-    fontSize: 24, 
-    fontWeight: "bold", 
-    marginBottom: 40, 
-    color: "white" 
-  }, 
-  notesGrid: { 
-    display: "flex",
-    flexDirection: "row", 
-    flexWrap: "wrap", 
-    justifyContent: "space-between", 
-    marginBottom: "30%"
-  },  
-  noteWrapper: { 
-    width: "45%", 
-    marginBottom: 10 
+  headerText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 40,
+    color: "white"
   },
-  noteCard: { 
-    backgroundColor: "white", 
-    borderRadius: 10, 
-    padding: 10, 
-    minHeight: 130, 
+  notesGrid: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginBottom: "30%"
+  },
+  noteWrapper: {
+    width: "45%",
+    marginBottom: 10
+  },
+  noteCard: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 10,
+    minHeight: 130,
     marginBottom: 5,
     borderWidth: 2,   // ajouté pour gérer la bordure de sélection
     borderColor: 'white'
   },
   noteCardSelected: {
-    borderColor: '#e75480', 
-    backgroundColor: '#ffe4ec', 
+    borderColor: '#e75480',
+    backgroundColor: '#ffe4ec',
   },
-  noteTitleText: { 
-    fontSize: 14, 
-    fontWeight: "bold", 
-    color: "white" },
-  noteContentPreview: { 
-    fontSize: 12, 
-    color: "#333" },
-  
+  noteTitleText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "white"
+  },
+  noteContentPreview: {
+    fontSize: 12,
+    color: "#333"
+  },
+
   selectionHeaderContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 40,
-    backgroundColor: 'rgba(255, 255, 255, 0.23)', 
+    backgroundColor: 'rgba(255, 255, 255, 0.23)',
     padding: 10,
     borderRadius: 8
   },
@@ -355,64 +357,64 @@ const styles = StyleSheet.create({
     right: 5,
     zIndex: 1
   },
-  
-  addButtonContainer: { 
-    position: "absolute", 
-    bottom: 145, 
+
+  addButtonContainer: {
+    position: "absolute",
+    bottom: 145,
     right: 30,
     zIndex: 5,
     elevation: 20
   },
-  addButton: { 
-    borderRadius: 50, 
-    width: 68, 
-    height: 68, 
-    backgroundColor: "#381f1f48", 
+  addButton: {
+    borderRadius: 50,
+    width: 68,
+    height: 68,
+    backgroundColor: "#381f1f48",
     borderColor: "white",
     borderWidth: 2,
-    justifyContent: "center", 
+    justifyContent: "center",
     alignItems: "center"
   },
-  
-  noteModalOverlay: { 
-    backgroundColor: "white", 
-    position: "absolute", 
-    width: "100%", 
-    height: "100%", 
-    top: 0, 
-    left: 0, 
+
+  noteModalOverlay: {
+    backgroundColor: "white",
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    top: 0,
+    left: 0,
   },
-  noteModalHeader: { 
-    flexDirection: "row", 
-    alignItems: "flex-end", 
-    width: "100%", 
-    backgroundColor: "#f0f0f0cd", 
-    height: 90, 
-    paddingBottom: 10, 
-    paddingHorizontal: 15 
+  noteModalHeader: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    width: "100%",
+    backgroundColor: "#f0f0f0cd",
+    height: 90,
+    paddingBottom: 10,
+    paddingHorizontal: 15
   },
-  headerControls: { 
-    flexDirection: "row", 
-    alignItems: "center", 
-    gap: 10, 
-    flex: 1 
+  headerControls: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    flex: 1
   },
-  titleInput: { 
-    fontSize: 18, 
-    fontWeight: "bold", 
-    flex: 1 
+  titleInput: {
+    fontSize: 18,
+    fontWeight: "bold",
+    flex: 1
   },
-  noteInput: { 
-    flex: 1, 
-    padding: 20, 
-    textAlignVertical: "top", 
-    fontSize: 16 
+  noteInput: {
+    flex: 1,
+    padding: 20,
+    textAlignVertical: "top",
+    fontSize: 16
   },
-  saveButton: { 
-    paddingHorizontal: 15, 
-    paddingVertical: 8, 
+  saveButton: {
+    paddingHorizontal: 15,
+    paddingVertical: 8,
     marginRight: 15,
-    backgroundColor: "#e75480", 
-    borderRadius: 20 
+    backgroundColor: "#e75480",
+    borderRadius: 20
   }
 })
