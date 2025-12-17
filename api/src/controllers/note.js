@@ -32,7 +32,7 @@ router.get('/user/:user_id', passport.authenticate('user', { session: false }), 
     console.log("[API] Récupération des notes de l'utilisateur :", req.params.user_id);
     try {
         const notes = await UserObject.find({ user_id: req.params.user_id });
-        return res.send({ ok: true, notes });
+        return res.status(200).send({ ok: true, notes });
     }
     catch (error) {
         console.error(error);
@@ -46,7 +46,7 @@ router.get('/:id', passport.authenticate('user', { session: false }), async (req
         const note = await UserObject.findById(req.params.id);
         if (!note)
             return res.status(404).send({ ok: false, code: 'note not found' });
-        return res.send({ ok: true, note });
+        return res.status(200).send({ ok: true, note });
     } catch (error) {
         console.error(error);
         return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
@@ -68,7 +68,7 @@ router.post('/create', passport.authenticate('user', { session: false }), async 
         
         await newNote.save();
         console.log("[API] Note sauvegardée avec succès !");
-        return res.send({ ok: true, note: newNote });
+        return res.status(200).send({ ok: true, note: newNote });
     } catch (error) {
         console.error("[API] Erreur création :", error);
         return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
@@ -87,7 +87,7 @@ router.put('/:id', passport.authenticate('user', { session: false }), async (req
         );
         if (!updatedNote)
             return res.status(404).send({ ok: false, code: 'note not found' });
-        return res.send({ ok: true, note: updatedNote });
+        return res.status(200).send({ ok: true, note: updatedNote });
     } catch (error) {
         console.error(error);
         return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
@@ -101,7 +101,7 @@ router.delete('/:id', passport.authenticate('user', { session: false }), async (
         const deletedNote = await UserObject.findByIdAndDelete(req.params.id);
         if (!deletedNote)
             return res.status(404).send({ ok: false, code: 'note not found' });
-        return res.send({ ok: true, note: deletedNote });
+        return res.status(200).send({ ok: true, note: deletedNote });
     } catch (error) {
         console.error(error);
         return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
