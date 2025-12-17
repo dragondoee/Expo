@@ -47,23 +47,7 @@ router.get('/:id', passport.authenticate('user', { session: false }), async (req
 // SIGNUP
 router.post("/signup", async (req, res) => {
   try {
-    let { email, first_name, last_name, password, cpassword, role } = req.body;
-    email = (email || "").trim().toLowerCase();
-
-    if (!email || !password || !cpassword)
-      return res.status(400).send({
-        ok: false,
-        code: "EMAIL_AND_PASSWORD_REQUIRED",
-        message: "Email and password are required",
-      });
-
-    if (password != cpassword)
-      return res.status(401).send({
-        ok: false,
-        code: "PASSWORDS_UNMATCH",
-        message: "passwords are unmatched",
-      });
-
+    let { email, first_name, last_name, password, role } = req.body;
 
     if (await UserObject.findOne({ email }))
       return res.status(401).send({
@@ -92,7 +76,6 @@ router.post("/signup", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     let { password, email } = req.body;
-    email = (email || "").trim().toLowerCase();
 
     if (!email || !password)
       return res.status(400).send({
