@@ -117,7 +117,7 @@ const Index = () => {
   const handleSave = async () => {
     if (!title && !noteContent) return closeNote()
     if (!user || !user._id) {
-      alert("Vous devez être connecté pour sauvegarder une note")
+      Alert.alert("Vous devez être connecté pour sauvegarder une note")
       return
     }
 
@@ -134,7 +134,7 @@ const Index = () => {
           closeNote()
           setUpdateNoteId(null)
         } else {
-          alert("Erreur lors de la mise à jour", e.message || e.code || "");
+          Alert.alert("Erreur lors de la mise à jour", res.message || res.code || "");
         }
       } else {
         // création d'une nouvelle note
@@ -148,12 +148,12 @@ const Index = () => {
           await fetchNotes()
           closeNote()
         } else {
-          alert("Erreur lors de la sauvegarde", e.message || e.code || "");
+          Alert.alert("Erreur lors de la sauvegarde", res.message || res.code || "");
         }
       }
     } catch (e) {
       console.error("Erreur mise à jour :", e);
-      alert("Erreur mise à jour :", e.message || e.code || "Erreur");
+      Alert.alert("Erreur mise à jour :", e.message || e.code || "Erreur");
     }
   }
 

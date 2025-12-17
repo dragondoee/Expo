@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-import { Alert } from "react-native";
+import { Alert, Text } from "react-native";
 import useAuthStore from "../store/authStore";
 import api from "../services/api";
 import ButtonComponent from "@/components/Button";
@@ -24,6 +24,16 @@ const SignupForm = () => {
 
     if (password !== confirmPassword) {
       Alert.alert('Erreur', 'Les mots de passe ne correspondent pas.');
+      return;
+    }
+
+    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      Alert.alert('Erreur', 'Veuillez entrer une adresse email valide.');
+      return;
+    }
+
+    if (password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)) {
+      Alert.alert('Erreur', 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.');
       return;
     }
 
@@ -75,7 +85,7 @@ const SignupForm = () => {
             />
 
             <Input
-              label="Email :"
+              label="* Email :"
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
@@ -83,20 +93,23 @@ const SignupForm = () => {
             />
 
             <Input
-              label="Mot de passe :"
+              label="* Mot de passe :"
               value={password}
               onChangeText={setPassword}
               secureTextEntry
               placeholder="Mot de passe"
             />
+            <Text style={{ fontSize: 12, color: '#646464ff', position: 'relative', bottom: 15 }}>8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.</Text>
 
             <Input
-              label="Confirmer le mot de passe :"
+              label="* Confirmer le mot de passe :"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
               secureTextEntry
               placeholder="Confirmer le mot de passe"
             />
+
+            <Text style={{ fontSize: 12, color: '#646464ff', marginBottom: 10 }}>* Champs obligatoires</Text>
 
             <ButtonComponent title="S'inscrire" onPress={handleSignup} />
 
