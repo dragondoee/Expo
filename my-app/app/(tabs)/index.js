@@ -241,7 +241,11 @@ export default function Index() {
 
   const updateNote = async (note) => {
     setNoteContent(note.content)
-    setTitle(note.title)
+    if (note.title === "Sans titre") {
+        setTitle("") 
+    } else {
+        setTitle(note.title)
+    }
     setUpdateNoteId(note._id)
     setShowNote(true)
   }
