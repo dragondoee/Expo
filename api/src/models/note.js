@@ -6,7 +6,7 @@ const Schema = new mongoose.Schema(
     {
         user_id: { type: String },
         title: { type: String, trim: true },
-        content: { type: String },
+        content: { type: String, default: '' },
     },
     { timestamps: true }
 )
