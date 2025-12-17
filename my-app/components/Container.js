@@ -3,8 +3,9 @@ import { View, StyleSheet, Text } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import BgImage from './Theme';
 import { Link } from 'expo-router';
+import { Ionicons } from "@expo/vector-icons";
 
-const ScreenContainer = ({ title, link, linkref, children }) => {
+const ScreenContainer = ({ title, link, linkref, backlink, children, style }) => {
     return (
         <BgImage 
             source={require('../assets/images/bg.png')} 
@@ -16,13 +17,20 @@ const ScreenContainer = ({ title, link, linkref, children }) => {
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={{ flexGrow: 1 }}
             >
-                <View style={styles.container}>
+                <View style={[styles.container, style]} >
+
+                    {backlink && <Link href={backlink} style={styles.backButton}>
+                        <Ionicons name="arrow-back-outline" size={16} color="white" />
+                            Retour
+                    </Link>}
+
                     <View style={styles.innerContainer}>
 
-                        {<Text style={styles.title}>{title}</Text>}
-                        <Link style={styles.link} href={linkref}>{link}</Link>
+                        {title && <Text style={styles.title}>{title}</Text>}
+                        {link && linkref && <Link style={styles.link} href={linkref}>{link}</Link>}
                         
                         {children}
+
                     </View>
                 </View>
             </KeyboardAwareScrollView>
@@ -59,7 +67,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         textDecorationLine: 'underline',
         textDecorationColor: "#e75480",
-    }
+    },
+    backButton: {
+        marginRight: "auto",
+        zIndex: 1,
+        color: "white",
+        fontWeight: "bold",
+        fontSize: 16,
+        backgroundColor: '#00000034',
+        padding: 8,
+        borderRadius: 5,
+        marginBottom: 20,
+  },
 });
 
 export default ScreenContainer;

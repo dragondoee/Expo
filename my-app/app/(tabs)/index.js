@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
     borderRadius: 50, 
     width: 60, 
     height: 60, 
-    backgroundColor: "#2196F3", 
+    backgroundColor: "#e75480af", 
+    borderBlockColor: "white",
     justifyContent: "center", 
     alignItems: "center" 
   },
@@ -151,7 +152,7 @@ export default function Index() {
 
   // mise à jour d'une note existante
   const updateNote = async (note) => {
-    setNoteContent(note.content)
+    setNoteContent(note.text)
     setTitle(note.title)
     setUpdateNoteId(note._id)
     setShowNote(true)
@@ -252,60 +253,60 @@ export default function Index() {
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.notesGrid}>
               {/* Affichage dynamique des notes */}
-              {notes.length === 0 && (
-                <Text style={{ color: 'white', opacity: 0.7 }}>
-                  Aucune note pour le moment
-                </Text>
-              )}
+                      {notes.length === 0 && (
+                      <Text style={{ color: 'white', opacity: 0.9, fontSize: 16, marginTop: 20 }}>
+                        Aucune note pour le moment
+                      </Text>
+                      )}
 
-              {notes.map((item) => (
-                <TouchableOpacity key={item._id} style={styles.noteWrapper}>
-                  <TouchableOpacity style={styles.noteCard} onPress={() => updateNote(item)}>
-                    <Text numberOfLines={6} style={styles.noteContentPreview}>
-                      {item.text}
-                    </Text>
+                      {notes.map((item) => (
+                      <TouchableOpacity key={item._id} style={styles.noteWrapper}>
+                        <TouchableOpacity style={styles.noteCard} onPress={() => updateNote(item)}>
+                        <Text numberOfLines={6} style={styles.noteContentPreview}>
+                          {item.text}
+                        </Text>
+                        </TouchableOpacity>
+                        <Text numberOfLines={1} style={styles.noteTitleText}>
+                        {item.title}
+                        </Text>
+                      </TouchableOpacity>
+                      ))}
+                    </View>
+                    </ScrollView>
+                  </View>
+                  </SafeAreaView>
+
+                  <TouchableOpacity onPress={openNote} style={styles.addButtonContainer} activeOpacity={0.8}>
+                  <View style={styles.addButton}>
+                    <Ionicons name="pencil" size={28} color="white" />
+                  </View>
                   </TouchableOpacity>
-                  <Text numberOfLines={1} style={styles.noteTitleText}>
-                    {item.title}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </ScrollView>
-        </View>
-      </SafeAreaView>
 
-      <TouchableOpacity onPress={openNote} style={styles.addButtonContainer} activeOpacity={0.8}>
-        <View style={styles.addButton}>
-          <Ionicons name="add" size={30} color="white" />
-        </View>
-      </TouchableOpacity>
-
-      {showNote && (
-        <View style={{
-          backgroundColor: 'white',
-          shadowColor: '#000',
-          shadowOpacity: 0.2,
-          shadowRadius: 5,
-          width: '100%',
-          height: '100%',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          zIndex: 10,
-        }}>
-          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', width: '100%', backgroundColor: '#f0f0f0cd', height: 90, paddingBottom: 5 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 15, gap: 10 }}>
-              <TouchableOpacity onPress={() => setShowNote(false)} >
-                <Ionicons name="arrow-back" size={24} color="#2196F3"/>
-              </TouchableOpacity>
-              <TextInput 
-                placeholder="Titre..." 
-                onChangeText={setTitle} 
-                value={title} 
-                style={styles.titleInput} 
-              />
-              {/* Bouton Sauvegarder */}
+                  {showNote && (
+                  <View style={{
+                    backgroundColor: 'white',
+                    shadowColor: '#000',
+                    shadowOpacity: 0.2,
+                    shadowRadius: 5,
+                    width: '100%',
+                    height: '100%',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    zIndex: 10,
+                  }}>
+                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', width: '100%', backgroundColor: '#f0f0f0cd', height: 90, paddingBottom: 5 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 15, gap: 10 }}>
+                      <TouchableOpacity onPress={() => setShowNote(false)} >
+                      <Ionicons name="arrow-back" size={24} color="#2196F3"/>
+                      </TouchableOpacity>
+                      <TextInput 
+                      placeholder="Titre..." 
+                      onChangeText={setTitle} 
+                      value={title} 
+                      style={styles.titleInput} 
+                      />
+                      {/* Bouton Sauvegarder */}
               <TouchableOpacity onPress={handleSave} style={styles.saveButton}>
                 <Text style={{color: 'white', fontWeight: 'bold'}}>OK</Text>
               </TouchableOpacity>
