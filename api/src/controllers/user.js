@@ -28,7 +28,21 @@ router.get('/all', passport.authenticate('admin', { session: false }), async (re
   }
 });
 
-router.get('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
+router.get('/me', passport.authenticate('user', { session: false }), async (req, res) => {
+  try {
+    const user = await UserObject.findById(req.user._id);
+
+    if (!user)
+      return res.status(404).send({ ok: false, code: 'user not found' });
+
+    return res.status(200).send({ ok: true, user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+  }
+});
+
+router.get('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
   try {
     const user = await UserObject.findById(req.params.id);
 
