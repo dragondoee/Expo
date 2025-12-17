@@ -1,6 +1,6 @@
 import { Text, View, TouchableOpacity, TextInput, StyleSheet, ScrollView, Alert } from "react-native"
 import BgImage from "../../components/Theme"
-import React, { useEffect, useState, useCallback } from "react"
+import React, { useEffect, useState, useCallback, useMemo } from "react"
 import { Ionicons } from "@expo/vector-icons"
 import { SafeAreaView } from "react-native-safe-area-context"
 import api from "../../services/api"
@@ -18,8 +18,11 @@ const Index = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const isSelectionMode = selectedIds.length > 0;
 
+  const [sortBy, setSortBy] = useState("date"); 
+
   const user = useAuthStore((state) => state.user)
   const isFocused = useIsFocused();
+
 
   // chargement des notes
   const fetchNotes = useCallback(async () => {
@@ -156,12 +159,39 @@ const Index = () => {
       Alert.alert("Erreur mise à jour :", e.message || e.code || "Erreur");
     }
   }
+
+  // logique de tri des notes
+  const sortedNotes = useMemo(() => {
+    const notesCopy = [...notes];
+    if (sortBy === "date") {
+      // tri par date de mise à jour (ou création si pas de mise à jour)
+      return notesCopy.sort((a, b) => new Date(b.updatedAt || b._id) - new Date(a.updatedAt || a._id));
+    } else {
+      // tri par ordre alphabétique du titre
+      return notesCopy.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+    }
+  }, [notes, sortBy]);
   
 
   return (
     <BgImage source={require("../../assets/images/bg.png")} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.mainContent}>
+
+          {!isSelectionMode && (
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <Text style={styles.headerText}>Mes Notes</Text>
+              <TouchableOpacity 
+                onPress={() => setSortBy(sortBy === "date" ? "alpha" : "date")}
+                style={styles.sortButton}
+              >
+                <Ionicons name={sortBy === "date" ? "time-outline" : "text-outline"} size={20} color="white" />
+                <Text style={{ color: 'white', marginLeft: 5 }}>
+                  {sortBy === "date" ? "Récent" : "A-Z"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
 
           {/* header dynamique (normal vs sélection) */}
           {isSelectionMode ? (
@@ -172,15 +202,15 @@ const Index = () => {
                 </TouchableOpacity>
                 <Text style={styles.selectionHeaderText}>{selectedIds.length} sélectionné(s)</Text>
               </View>
-              <TouchableOpacity onPress={deleteSelectedNotes}>
+              <TouchableOpacity onPress={deleteSelectedNotes} style={{backgroundColor: "#ffffff94", padding: 6, borderRadius: 6}}>
                 <Ionicons name="trash" size={28} color="#ff4444" />
               </TouchableOpacity>
             </View>
-          ) : (
-            <Text style={styles.headerText}>Mes Notes</Text>
-          )}
+          ) : (null)}
+
+          {/* affiche le nombre de notes */}
             <View style={{ marginBottom: 40, alignSelf: 'flex-start' }}>
-            <Text style={{ color: "white", fontSize: 16, opacity: 0.9, backgroundColor: '#00000033', paddingHorizontal: 10, paddingVertical: 2, borderRadius: 50 }}>
+            <Text style={styles.noteCountBadge}>
               {notes.length} note{notes.length > 1 ? "s" : ""}
             </Text>
             </View>
@@ -188,17 +218,14 @@ const Index = () => {
 
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.notesGrid}>
-              
-
               {notes.length === 0 && (
                 <Text style={{ color: 'white', opacity: 0.9, fontSize: 16, marginTop: 20 }}>
                   Aucune note pour le moment
                 </Text>
               )}
 
-              {notes.map((item) => {
-                const isSelected = selectedIds.includes(item._id); // vérifie si la note est cochée
-
+              {sortedNotes.map((item) => {
+                const isSelected = selectedIds.includes(item._id);
                 return (
                   <TouchableOpacity
                     key={item._id}
@@ -316,15 +343,15 @@ const styles = StyleSheet.create({
   },
   noteWrapper: {
     width: "45%",
-    marginBottom: 10
+    marginBottom: 15
   },
   noteCard: {
     backgroundColor: "white",
     borderRadius: 10,
     padding: 10,
     minHeight: 130,
-    marginBottom: 5,
-    borderWidth: 2,   // ajouté pour gérer la bordure de sélection
+    marginBottom: 3,
+    borderWidth: 2,   
     borderColor: 'white'
   },
   noteCardSelected: {
@@ -424,5 +451,14 @@ const styles = StyleSheet.create({
     marginRight: 15,
     backgroundColor: "#e75480",
     borderRadius: 20
+  },
+  noteCountBadge: {
+    color: "white",
+    fontSize: 16,
+    opacity: 0.9,
+    backgroundColor: '#00000033',
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 50
   }
 })
