@@ -6,7 +6,7 @@ import { Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 
-export default function Profil() {
+const Profil = () => {
   const user = useAuthStore(state => state.user);
   const logout = useAuthStore(state => state.logout);
 
@@ -39,6 +39,8 @@ export default function Profil() {
     </BgImage>
   );
 }
+
+export default Profil;
 
 const styles = StyleSheet.create({
   container: {

@@ -3,7 +3,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { Tabs } from 'expo-router';
 
-export default function TabLayout() {
+const TabLayout = () => {
   return (
     <Tabs
       screenOptions={{
@@ -25,7 +25,7 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: 'Profil',
-          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="account-circle" size={24} color="black" />,
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons name="account-circle" size={24} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -37,3 +37,5 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+export default TabLayout;
