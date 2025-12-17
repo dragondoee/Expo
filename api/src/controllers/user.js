@@ -46,7 +46,7 @@ router.get('/:id', passport.authenticate('user', { session: false }), async (req
 
 // SIGNUP
 router.post("/signup", async (req, res) => {
-  let { email, first_name, last_name, password, cpassword } = req.body;
+  let { email, first_name, last_name, password, cpassword, role } = req.body;
   email = (email || "").trim().toLowerCase();
 
   if (!email || !password || !cpassword)
@@ -72,7 +72,7 @@ router.post("/signup", async (req, res) => {
         message: "Email is invalid",
       });
 
-    const user = await UserObject.create({ email: email, first_name: first_name, last_name: last_name, password: password });
+    const user = await UserObject.create({ email: email, first_name: first_name, last_name: last_name, password: password, role: role });
 
     user.set({ last_login_at: Date.now() });
     await user.save();

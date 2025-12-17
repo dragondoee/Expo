@@ -31,7 +31,16 @@ module.exports = function (app) {
   passport.use(
     "admin",
     new JwtStrategy(opts, async function (jwtPayload, done) {
-      return done(null, { _id: jwtPayload._id, _type: "admin" });
+      try {
+        const user = await User.findById(jwtPayload._id);
+
+        if (!user) return done(null, false);
+        if (user.role !== "admin") return done(null, false);
+
+        return done(null, user);
+      } catch (err) {
+        return done(err, false);
+      }
     })
   );
 
