@@ -21,7 +21,7 @@ const LoginScreen = () => {
             const response = await api.post("/user/login", { email, password });
 
             if (response.status !== 200) {
-                Alert.alert('Erreur', 'Identifiants incorrects');
+                Alert.alert('Erreur', response.message || response.code || 'Identifiants incorrects');
                 return;
             }
 

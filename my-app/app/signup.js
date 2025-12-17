@@ -35,8 +35,8 @@ const SignupForm = () => {
         password,
       });
 
-      if (response.data.ok === false) {
-        Alert.alert("Erreur", response.data.message || "Erreur d'inscription");
+      if (response.status !== 200) {
+        Alert.alert("Erreur", response.message || response.code || "Erreur d'inscription");
         return;
       }
       const userData = response;

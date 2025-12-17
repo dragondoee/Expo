@@ -31,9 +31,9 @@ const EditProfileForm = () => {
         last_name: lastName,
       });
 
-      if (response.ok === false) {
+      if (response.status !== 200) {
         console.log("Erreur :", response);
-        Alert.alert("Erreur modification", response.error || "Erreur lors de la modification du profil");
+        Alert.alert("Erreur modification", response.message || response.code || "Erreur lors de la modification du profil");
         return;
       }
       const userData = response;
@@ -44,11 +44,10 @@ const EditProfileForm = () => {
       router.push("/profile");
 
     } catch (error) {
-      console.log("Erreur update:", error.message);
+      console.log("Erreur update:", error.message || error.code);
 
       Alert.alert(
-        "Erreur",
-        "Erreur lors de la modification du profil"
+        "Erreur", error.message || error.code || "Erreur lors de la modification du profil"
       );
     }
   };
@@ -68,7 +67,7 @@ const EditProfileForm = () => {
             const response = await api.delete("/user/me");
 
             if (response.status !== 200) {
-              Alert.alert('Erreur', 'Erreur lors de la suppression du compte');
+              Alert.alert('Erreur', response.message || response.code || 'Erreur lors de la suppression du compte');
               return;
             }
 
@@ -77,7 +76,7 @@ const EditProfileForm = () => {
 
           } catch (error) {
             console.error("Erreur suppression:", error);
-            Alert.alert("Erreur suppression:", error.message);
+            Alert.alert("Erreur suppression:", error.message || error.code || "Erreur lors de la suppression du compte");
           }
           }
         }

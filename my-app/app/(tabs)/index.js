@@ -94,7 +94,7 @@ const Index = () => {
               setSelectedIds([]);
             } catch (e) {
               console.error(e);
-              Alert.alert("Erreur", "Impossible de supprimer certaines notes");
+              Alert.alert("Erreur", e.message || e.code || "Impossible de supprimer certaines notes");
             }
           }
         }
@@ -134,7 +134,7 @@ const Index = () => {
           closeNote()
           setUpdateNoteId(null)
         } else {
-          alert("Erreur lors de la mise à jour")
+          alert("Erreur lors de la mise à jour", e.message || e.code || "");
         }
       } else {
         // création d'une nouvelle note
@@ -148,12 +148,12 @@ const Index = () => {
           await fetchNotes()
           closeNote()
         } else {
-          alert("Erreur lors de la sauvegarde")
+          alert("Erreur lors de la sauvegarde", e.message || e.code || "");
         }
       }
     } catch (e) {
       console.error("Erreur mise à jour :", e);
-      alert("Erreur mise à jour :", e.message);
+      alert("Erreur mise à jour :", e.message || e.code || "Erreur");
     }
   }
 
