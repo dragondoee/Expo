@@ -58,11 +58,11 @@ const SignupForm = () => {
       Alert.alert("Inscription réussie", `Bienvenue ${userData.data.first_name}!`);
 
     } catch (error) {
-      console.log("Erreur signup:", error.message);
+      console.log("Erreur signup:", error.message || error.code);
 
       Alert.alert(
         "Erreur",
-        error.message || "Erreur pendant l'inscription"
+        error.message || error.code || "Erreur pendant l'inscription"
       );
     }
   };

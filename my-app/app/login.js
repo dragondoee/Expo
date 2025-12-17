@@ -33,7 +33,7 @@ const LoginScreen = () => {
 
         } catch (error) {
             console.error("Erreur login:", error);
-            Alert.alert("Erreur login:", error.message);
+            Alert.alert("Erreur login:", error.message || error.code || "Erreur lors de la connexion");
         }
     };
 
