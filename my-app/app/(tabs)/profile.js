@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import BgImage from '../../components/Theme';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import useAuthStore from "../../store/authStore";
-import { Button } from '@react-navigation/elements';
 import { Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
