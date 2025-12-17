@@ -14,11 +14,26 @@ const SERVEUR_ERROR = 'SERVEUR_ERROR';
 
 // ===================================== GET =====================================
 
+// Récupérer les informations de son propre compte
+router.get('/me', passport.authenticate('user', { session: false }), async (req, res) => {
+  try {
+    const user = await UserObject.findById(req.user._id);
+
+    if (!user)
+      return res.status(404).send({ ok: false, code: 'user not found' });
+
+    return res.status(200).send({ ok: true, user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+  }
+});
+
 router.get('/all', passport.authenticate('admin', { session: false }), async (req, res) => {
   try {
     const users = await UserObject.find();
 
-    if (!users)
+    if (!users || users.length === 0)
       return res.status(404).send({ ok: false, code: 'user not found' });
 
     return res.status(200).send({ ok: true, users });
@@ -28,7 +43,7 @@ router.get('/all', passport.authenticate('admin', { session: false }), async (re
   }
 });
 
-router.get('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
+router.get('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
   try {
     const user = await UserObject.findById(req.params.id);
 
@@ -46,24 +61,8 @@ router.get('/:id', passport.authenticate('user', { session: false }), async (req
 
 // SIGNUP
 router.post("/signup", async (req, res) => {
-  let { email, first_name, last_name, password, cpassword, role } = req.body;
-  email = (email || "").trim().toLowerCase();
-
-  if (!email || !password || !cpassword)
-    return res.status(400).send({
-      ok: false,
-      code: "EMAIL_AND_PASSWORD_REQUIRED",
-      message: "Email and password are required",
-    });
-
-  if (password != cpassword)
-    return res.status(401).send({
-      ok: false,
-      code: "PASSWORDS_UNMATCH",
-      message: "passwords are unmatched",
-    });
-
   try {
+    let { email, first_name, last_name, password, role } = req.body;
 
     if (await UserObject.findOne({ email }))
       return res.status(401).send({
@@ -90,17 +89,16 @@ router.post("/signup", async (req, res) => {
 
 // LOGIN
 router.post("/login", async (req, res) => {
-  let { password, email } = req.body;
-  email = (email || "").trim().toLowerCase();
-
-  if (!email || !password)
-    return res.status(400).send({
-      ok: false,
-      code: "EMAIL_AND_PASSWORD_REQUIRED",
-      message: "Email and password are required",
-    });
-
   try {
+    let { password, email } = req.body;
+
+    if (!email || !password)
+      return res.status(400).send({
+        ok: false,
+        code: "EMAIL_AND_PASSWORD_REQUIRED",
+        message: "Email and password are required",
+      });
+
     const user = await UserObject.findOne({ email });
 
     if (!user)
@@ -111,7 +109,6 @@ router.post("/login", async (req, res) => {
       });
 
     const match = await user.comparePassword(password);
-    // config.ENVIRONMENT === "development" || (await user.comparePassword(password));
 
     if (!match)
       return res.status(401).send({
@@ -136,14 +133,29 @@ router.post("/login", async (req, res) => {
 
 // ===================================== UPDATE =====================================
 
-router.put('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
+// Mise à jour de son propre compte
+router.put('/me', passport.authenticate('user', { session: false }), async (req, res) => {
+  try {
+    const updates = req.body;
+    const user = await UserObject.findByIdAndUpdate(req.user._id, updates, { new: true });
+
+    if (!user)
+      return res.status(404).send({ ok: false, code: 'user not found' });
+    return res.status(200).send({ ok: true, data: user });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+  }
+});
+
+router.put('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
   try {
     const updates = req.body;
     const user = await UserObject.findByIdAndUpdate(req.params.id, updates, { new: true });
 
     if (!user)
       return res.status(404).send({ ok: false, code: 'user not found' });
-    return res.status(200).send({ ok: true, data : user });
+    return res.status(200).send({ ok: true, data: user });
   } catch (error) {
     console.log(error);
     res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
@@ -152,7 +164,23 @@ router.put('/:id', passport.authenticate('user', { session: false }), async (req
 
 // ===================================== DELETE =====================================
 
-router.delete('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
+// Suppression de son propre compte
+router.delete('/me', passport.authenticate('user', { session: false }), async (req, res) => {
+  try {
+    const user = await UserObject.findByIdAndDelete(req.user._id);
+
+    if (!user)
+      return res.status(404).send({ ok: false, code: 'user not found' });
+
+    return res.status(200).send({ ok: true, message: 'user deleted' });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+  }
+});
+
+router.delete('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
   try {
     const user = await UserObject.findByIdAndDelete(req.params.id);
 

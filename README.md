@@ -44,7 +44,5 @@ http://{ip}:3000
 https://expo-5afp.onrender.com
 
 ### Collection Postman :
-Un fichier json se trouve dans le dossier api, téléchargez le pour ajouter la collection dans Postman.
-
-Vous pouvez aussi la retrouver via ce lien :
+Vous pouvez trouver la collection via ce lien :
 https://www.postman.com/flight-administrator-51391273/mobiledeveloppement/collection/u2ze7rl/mobilenoteapp?action=share&creator=36766595&active-environment=36766595-a5af2c3d-1f96-4667-94b4-f72419e27e2a

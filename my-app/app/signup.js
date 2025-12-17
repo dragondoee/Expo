@@ -6,7 +6,6 @@ import ButtonComponent from "@/components/Button";
 import ScreenContainer from '../components/Container';
 import Input from "../components/Input";
 
-
 // formulaire d'inscription
 const SignupForm = () => {
   const [email, setEmail] = useState('');
@@ -23,13 +22,17 @@ const SignupForm = () => {
       return;
     }
 
+    if (password !== confirmPassword) {
+      Alert.alert('Erreur', 'Les mots de passe ne correspondent pas.');
+      return;
+    }
+
     try {
       const response = await api.post("/user/signup", {
         email,
         first_name: firstName,
         last_name: lastName,
         password,
-        cpassword: confirmPassword,
       });
 
       if (response.data.ok === false) {

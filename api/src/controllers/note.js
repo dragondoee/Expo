@@ -15,6 +15,36 @@ const SERVEUR_ERROR = 'SERVEUR_ERROR';
 
 // ===================================== GET ======================================
 
+/* récupérer les notes de l'utilisateur connecté */
+router.get('/user/all', passport.authenticate('user', { session: false }), async (req, res) => {
+    console.log("[API] Récupération des notes de l'utilisateur :", req.user._id);
+    try {
+        const notes = await UserObject.find({ user_id: req.user._id });
+        if (!notes || notes.length === 0)
+            return res.status(404).send({ ok: false, code: 'notes not found' });
+        return res.status(200).send({ ok: true, notes });
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
+    }
+});
+
+/* récupérer une note de l'utilisateur connecté */
+router.get('/user/:id', passport.authenticate('user', { session: false }), async (req, res) => {
+    console.log("[API] Récupération d'une note de l'utilisateur :", req.user._id);
+    try {
+        const note = await UserObject.find({ user_id: req.user._id, _id: req.params.id });
+        if (!note || note.length === 0)
+            return res.status(404).send({ ok: false, code: 'note not found' });
+        return res.status(200).send({ ok: true, note });
+    }
+    catch (error) {
+        console.error(error);
+        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
+    }
+});
+
 router.get('/all', passport.authenticate('admin', { session: false }), async (req, res) => {
     console.log("[API] Récupération de toutes les notes");
     try {
@@ -27,24 +57,10 @@ router.get('/all', passport.authenticate('admin', { session: false }), async (re
     }
 });
 
-/* récupérer les notes de l'utilisateur connecté */
-router.get('/user/:user_id', passport.authenticate('user', { session: false }), async (req, res) => {
-    console.log("[API] Récupération des notes de l'utilisateur :", req.params.user_id);
-    try {
-        const notes = await UserObject.find({ user_id: req.params.user_id });
-        return res.status(200).send({ ok: true, notes });
-    }
-    catch (error) {
-        console.error(error);
-        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
-    }
-});
-
-
-router.get('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
+router.get('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
     try {
         const note = await UserObject.findById(req.params.id);
-        if (!note)
+        if (!note || note.length === 0)
             return res.status(404).send({ ok: false, code: 'note not found' });
         return res.status(200).send({ ok: true, note });
     } catch (error) {
@@ -77,7 +93,25 @@ router.post('/create', passport.authenticate('user', { session: false }), async 
 
 // ===================================== UPDATE =====================================
 
-router.put('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
+// Mise à jour d'une note de l'utilisateur connecté
+router.put('/user/:id', passport.authenticate('user', { session: false }), async (req, res) => {
+    try {
+        const { title, content } = req.body;
+        const updatedNote = await UserObject.findByIdAndUpdate(
+            { _id: req.params.id,  user_id: req.user._id },
+            { title, content: content },
+            { new: true }
+        );
+        if (!updatedNote)
+            return res.status(404).send({ ok: false, code: 'note not found' });
+        return res.status(200).send({ ok: true, note: updatedNote });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
+    }   
+});
+
+router.put('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
     try {
         const { title, content } = req.body;
         const updatedNote = await UserObject.findByIdAndUpdate(
@@ -96,7 +130,20 @@ router.put('/:id', passport.authenticate('user', { session: false }), async (req
 
 // ===================================== DELETE =====================================
 
-router.delete('/:id', passport.authenticate('user', { session: false }), async (req, res) => {
+// Suppression d'une note de l'utilisateur connecté
+router.delete('/user/:id', passport.authenticate('user', { session: false }), async (req, res) => {
+    try {
+        const deletedNote = await UserObject.findByIdAndDelete({ _id: req.params.id,  user_id: req.user._id });
+        if (!deletedNote)
+            return res.status(404).send({ ok: false, code: 'note not found' });
+        return res.status(200).send({ ok: true, note: deletedNote });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
+    }
+});
+
+router.delete('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
     try {
         const deletedNote = await UserObject.findByIdAndDelete(req.params.id);
         if (!deletedNote)

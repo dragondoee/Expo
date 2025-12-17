@@ -25,7 +25,7 @@ const Index = () => {
   const fetchNotes = useCallback(async () => {
     if (!user || !user._id) return;
     try {
-      const res = await api.get(`/note/user/${user._id}`);
+      const res = await api.get(`/note/user/all`);
       if (res.ok) {
         setNotes(res.notes);
       }
@@ -124,7 +124,7 @@ const Index = () => {
     try {
       if (updateNoteId) {
         // modifier une note existante
-        const res = await api.put(`/note/${updateNoteId}`, { 
+        const res = await api.put(`/note/user/${updateNoteId}`, { 
           title: title || "Sans titre", 
           content: noteContent
         })
@@ -152,10 +152,46 @@ const Index = () => {
         }
       }
     } catch (e) {
-      console.error(e)
-      alert("Erreur réseau")
+      console.error("Erreur mise à jour :", e);
+      alert("Erreur mise à jour :", e.message);
     }
   }
+
+  // suppression d'une note
+  const handleDelete = () => {
+    if (!updateNoteId) return;
+
+    Alert.alert(
+      "Supprimer la note",
+      "Êtes-vous sûr de vouloir supprimer cette note ?",
+      [
+        {
+          text: "Annuler",
+          style: "cancel"
+        },
+        {
+          text: "Supprimer",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              const res = await api.delete(`/note/user/${updateNoteId}`);
+              
+              if (res.ok) {
+                await fetchNotes();
+                closeNote();
+                clearNote();
+              } else {
+                alert("Erreur lors de la suppression");
+              }
+            } catch (e) {
+              console.error("Erreur mise à jour :", e);
+              alert("Erreur mise à jour :", e.message);
+            }
+          }
+        }
+      ]
+    );
+  };
 
   return (
     <BgImage source={require("../../assets/images/bg.png")} style={styles.container}>
