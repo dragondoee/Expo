@@ -7,7 +7,6 @@ const Schema = new mongoose.Schema(
         user_id: { type: String },
         title: { type: String, trim: true },
         content: { type: String },
-        datcre: { type: Date, default: Date.now },
     },
     { timestamps: true }
 )
