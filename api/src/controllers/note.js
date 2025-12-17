@@ -63,7 +63,7 @@ router.post('/create', passport.authenticate('user', { session: false }), async 
         const newNote = new UserObject({
             user_id: user_id,
             title, 
-            text: content, 
+            content: content, 
         });
         
         await newNote.save();
@@ -82,7 +82,7 @@ router.put('/:id', passport.authenticate('user', { session: false }), async (req
         const { title, content } = req.body;
         const updatedNote = await UserObject.findByIdAndUpdate(
             req.params.id,
-            { title, text: content },
+            { title, content: content },
             { new: true }
         );
         if (!updatedNote)

@@ -151,7 +151,7 @@ export default function Index() {
 
   // mise à jour d'une note existante
   const updateNote = async (note) => {
-    setNoteContent(note.text)
+    setNoteContent(note.content)
     setTitle(note.title)
     setUpdateNoteId(note._id)
     setShowNote(true)

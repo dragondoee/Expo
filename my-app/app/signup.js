@@ -1,13 +1,13 @@
 import { React, useState } from "react";
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import { StyleSheet, Text, TextInput, Alert } from "react-native";
 import useAuthStore from "../store/authStore";
 import api from "../services/api";
-import BgImage from '../components/Theme';
 import { Link } from 'expo-router';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import ButtonComponent from "@/components/Button";
+import ScreenContainer from '../components/Container';
 
 
-// Formulaire d'inscription
+// formulaire d'inscription
 const SignupForm = () => {
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -55,15 +55,7 @@ const SignupForm = () => {
   };
 
   return (
-    <BgImage source={require('../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
-      <KeyboardAwareScrollView
-        enableOnAndroid={true}
-        extraScrollHeight={40}
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flexGrow: 1 }}
-      >
-        <View style={styles.container}>
-          <View style={styles.signupContainer}>
+    <ScreenContainer>
             <Text style={styles.title}>Inscription</Text>
             <Link style={styles.link} href='login'>Vous avez un compte ? Se connecter</Link>
 
@@ -88,6 +80,7 @@ const SignupForm = () => {
               style={styles.input}
               placeholder="Email"
               value={email}
+              
               onChangeText={setEmail}
               keyboardType="email-address"
             />
@@ -110,34 +103,13 @@ const SignupForm = () => {
               onChangeText={setConfirmPassword}
             />
 
-            <TouchableOpacity style={styles.button} onPress={handleSignup}>
-              <Text style={styles.buttonText}>S&#39;inscrire</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </KeyboardAwareScrollView>
-    </BgImage>
+            <ButtonComponent title="S'inscrire" onPress={handleSignup} />
+
+    </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  signupContainer: {
-    width: 320,
-    paddingVertical: 24,
-    paddingHorizontal: 24,
-    backgroundColor: "#ffffffd2",
-    borderRadius: 8,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
   title: {
     textAlign: "center",
     marginBottom: 24,
@@ -164,21 +136,6 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 5,
     backgroundColor: "#fafafaff",
-  },
-  button: {
-    backgroundColor: "white",
-    borderWidth: 1.5,
-    borderColor: "#e75480",
-    paddingHorizontal: 13,
-    paddingVertical: 9,
-    borderRadius: 5,
-    marginTop: 16,
-    alignSelf: "flex-end", // remplace width: fit-content
-  },
-  buttonText: {
-    color: "#e75480",
-    textAlign: "center",
-    fontWeight: "600",
   },
 });
 
