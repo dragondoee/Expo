@@ -1,6 +1,6 @@
 import { Text, View, TouchableOpacity, TextInput, StyleSheet, ScrollView, Alert } from "react-native"
 import BgImage from "../../components/Theme"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useCallback } from "react"
 import { Ionicons } from "@expo/vector-icons"
 import { SafeAreaView } from "react-native-safe-area-context"
 import api from "../../services/api" 
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold", 
     marginBottom: 40, 
     color: "white" 
-  },
+  }, 
   notesGrid: { 
     display: "flex",
     flexDirection: "row", 
@@ -116,23 +116,15 @@ export default function Index() {
   const [updateNoteId, setUpdateNoteId] = useState(null)
 
   
-  // 2. On récupère l'utilisateur connecté depuis le store global
+  // on récupère l'utilisateur connecté depuis le store global
   const user = useAuthStore((state) => state.user)
   const isFocused = useIsFocused();
 
-  useEffect(() => {
-    // On ne charge les notes que si l'écran est actif ET qu'on a un utilisateur connecté
-    if(isFocused && user) {
-      fetchNotes();
-    }
-  }, [isFocused, user]);
-
-  const fetchNotes = async () => {
-    // Sécurité : si pas d'utilisateur, on ne fait rien
+  const fetchNotes = useCallback(async () => {
+    // si pas d'utilisateur, on ne fait rien
     if (!user || !user._id) return;
 
     try {
-      // 3. On utilise l'ID réel de l'utilisateur connecté
       const res = await api.get(`/note/user/${user._id}`);
       if (res.ok) {
         setNotes(res.notes);
@@ -140,7 +132,14 @@ export default function Index() {
     } catch (e) {
       console.log("Erreur chargement notes", e);
     }
-  }
+  }, [user]);
+
+  useEffect(() => {
+    // On ne charge les notes que si l'écran est actif ET qu'on a un utilisateur connecté
+    if(isFocused && user) {
+      fetchNotes();
+    }
+  }, [fetchNotes, isFocused, user]);
 
   const openNote = () => {
     setNoteContent("")

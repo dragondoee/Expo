@@ -18,7 +18,7 @@ const EditProfileForm = () => {
   const logout = useAuthStore(state => state.logout);
 
 
-  const { setUser, setToken, setIsLoggedIn } = useAuthStore();
+  const { setUser } = useAuthStore();
 
   const handleEdit = async () => {
     if (!email) {
@@ -56,35 +56,54 @@ const EditProfileForm = () => {
   };
 
   const handleDelete = async () => {
-    try {
-      const response = await api.delete("/user/" + user._id);
+    Alert.alert(
+      "Supprimer le profil",
+      "Êtes-vous sûr de vouloir supprimer votre profil ?",
+      [
+        {
+          text: "Annuler",
+        },
+        {
+          text: "Supprimer",
+          onPress: async () => {
+          try {
+            const response = await api.delete("/user/" + user._id);
 
-      if (response.status !== 200) {
-        Alert.alert('Erreur', 'Erreur lors de la suppression du compte');
-        return;
-      }
+            if (response.status !== 200) {
+              Alert.alert('Erreur', 'Erreur lors de la suppression du compte');
+              return;
+            }
 
-      Alert.alert('Succès', 'Compte supprimé avec succès');
-      logout();
+            Alert.alert('Succès', 'Compte supprimé avec succès');
+            logout();
 
-    } catch (error) {
-      console.error("Erreur suppression:", error);
-      Alert.alert("Erreur suppression:", error.message);
-    }
+          } catch (error) {
+            console.error("Erreur suppression:", error);
+            Alert.alert("Erreur suppression:", error.message);
+          }
+          }
+        }
+      ]
+    );
   };
 
   return (
     <BgImage source={require('../../assets/images/bg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
+      
       <KeyboardAwareScrollView
         enableOnAndroid={true}
         extraScrollHeight={40}
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ flexGrow: 1 }}
       >
-        <Link href="profile" style={{ ...styles.button, position: 'absolute', top: 40, left: 20, zIndex: 1 }}>
-          Retour
-        </Link>
+        
         <View style={styles.container}>
+
+          <Link href="profile" style={styles.backButton}>
+          <Ionicons name="arrow-back-outline" size={16} color="white" />
+            Retour
+        </Link>
+
           <View style={styles.signupContainer}>
             <MaterialCommunityIcons style={styles.imageAccount} name="account-edit" size={60} />
             <Text style={styles.title}>Modifier le profil</Text>
@@ -120,6 +139,7 @@ const EditProfileForm = () => {
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.buttonDelete} onPress={handleDelete}>
+              
               <Text style={{color: "red"}}>Supprimer</Text>
               <Ionicons name="trash-outline" size={20} color="red" />
             </TouchableOpacity>
@@ -133,12 +153,24 @@ const EditProfileForm = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    /* justifyContent: "center", */
     alignItems: "center",
+    marginTop: "20%",
   },
   imageAccount: {
     color: "#e75480",
     textAlign: "center",
+  },
+  backButton: {
+    marginRight: "auto",
+    zIndex: 1,
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
+    backgroundColor: '#00000034',
+    padding: 8,
+    borderRadius: 5,
+    marginBottom: 20,
   },
   signupContainer: {
     width: 320,
