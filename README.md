@@ -9,31 +9,31 @@
 ## Installation en local
 
 ### API
-- cd api
-- npm install
+- `cd api`
+- `npm install`
 - Ajouter un fichier **.env** avec une variable MONGODB_ENDPOINT
 
 ### Client
-- cd my-app
-- npm install
+- `cd my-app`
+- `npm install`
 
 
 ## Utilisation en local
 
 ### API
-1. Lancer l'API : npm run dev
+1. Lancer l'API : `npm run dev`
 
 ### Client
 **Attention, vos machines doivent être sur le même réseau internet**
 
 1. Récupérer l'ip de votre machine : 
-ipconfig
+`ipconfig`
 
 2. Mettre à jour le fichier config.js :
 http://{ip}:3000
 
 3. Lancer l'application : 
-npm run start
+`npm run start`
 
 4. Ouvrir l'application avec Expo
 
