@@ -60,9 +60,17 @@ router.get('/:id', passport.authenticate('admin', { session: false }), async (re
 // ===================================== POST =====================================
 
 // SIGNUP
+const { isStrongPassword } = require("../utils/password");
 router.post("/signup", async (req, res) => {
   try {
     let { email, first_name, last_name, password, role } = req.body;
+
+    if (!isStrongPassword(password))
+      return res.status(400).send({
+        ok: false,
+        message:
+          "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.",
+      });
 
     if (await UserObject.findOne({ email }))
       return res.status(401).send({
@@ -71,7 +79,13 @@ router.post("/signup", async (req, res) => {
         message: "Email is invalid",
       });
 
-    const user = await UserObject.create({ email: email, first_name: first_name, last_name: last_name, password: password, role: role });
+    const user = await UserObject.create({ 
+      email: email, 
+      first_name: first_name, 
+      last_name: last_name, 
+      password: password, 
+      role: role === "admin" ? "admin" : "user",
+    });
 
     user.set({ last_login_at: Date.now() });
     await user.save();
