@@ -12,6 +12,11 @@ const Schema = new mongoose.Schema(
     forgot_password_reset_token: { type: String, default: '' },
     forgot_password_reset_expires: { type: Date },
     last_login_at: { type: Date, default: Date.now },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
   },
   { timestamps: true }
 )
