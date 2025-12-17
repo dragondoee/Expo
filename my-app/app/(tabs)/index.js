@@ -156,6 +156,7 @@ const Index = () => {
       Alert.alert("Erreur mise à jour :", e.message || e.code || "Erreur");
     }
   }
+  
 
   return (
     <BgImage source={require("../../assets/images/bg.png")} style={styles.container}>
@@ -178,9 +179,16 @@ const Index = () => {
           ) : (
             <Text style={styles.headerText}>Mes Notes</Text>
           )}
+            <View style={{ marginBottom: 40, alignSelf: 'flex-start' }}>
+            <Text style={{ color: "white", fontSize: 16, opacity: 0.9, backgroundColor: '#00000033', paddingHorizontal: 10, paddingVertical: 2, borderRadius: 50 }}>
+              {notes.length} note{notes.length > 1 ? "s" : ""}
+            </Text>
+            </View>
+
 
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.notesGrid}>
+              
 
               {notes.length === 0 && (
                 <Text style={{ color: 'white', opacity: 0.9, fontSize: 16, marginTop: 20 }}>
@@ -296,7 +304,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 40,
+    marginBottom: 10,
     color: "white"
   },
   notesGrid: {
