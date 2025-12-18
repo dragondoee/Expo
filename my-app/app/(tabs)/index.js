@@ -9,18 +9,18 @@ import useAuthStore from "../../store/authStore"
 
 
 const Index = () => {
-  const [showNote, setShowNote] = useState(false)
-  const [noteContent, setNoteContent] = useState("")
-  const [title, setTitle] = useState("")
-  const [notes, setNotes] = useState([])
-  const [updateNoteId, setUpdateNoteId] = useState(null)
+  const [showNote, setShowNote] = useState(false);
+  const [noteContent, setNoteContent] = useState("");
+  const [title, setTitle] = useState("");
+  const [notes, setNotes] = useState([]);
+  const [updateNoteId, setUpdateNoteId] = useState(null);
 
   const [selectedIds, setSelectedIds] = useState([]);
   const isSelectionMode = selectedIds.length > 0;
 
   const [sortBy, setSortBy] = useState("date"); 
 
-  const user = useAuthStore((state) => state.user)
+  const user = useAuthStore((state) => state.user);
   const isFocused = useIsFocused();
 
 
@@ -45,12 +45,12 @@ const Index = () => {
   }, [fetchNotes, isFocused, user]);
 
   const openNote = () => {
-    setNoteContent("")
-    setTitle("")
-    setShowNote(true)
+    setNoteContent("");
+    setTitle("");
+    setShowNote(true);
   }
 
-  const closeNote = () => setShowNote(false)
+  const closeNote = () => setShowNote(false);
 
   // logique de sélection notes
   const handleLongPress = (noteId) => {
@@ -106,19 +106,19 @@ const Index = () => {
   };
 
   const updateNote = async (note) => {
-    setNoteContent(note.content)
+    setNoteContent(note.content);
     if (note.title === "Sans titre") {
-      setTitle("")
+      setTitle("");
     } else {
-      setTitle(note.title)
+      setTitle(note.title);
     }
     setUpdateNoteId(note._id)
-    setShowNote(true)
+    setShowNote(true);
   }
 
   // sauvegarde (création ou mise à jour) note
   const handleSave = async () => {
-    if (!title && !noteContent) return closeNote()
+    if (!title && !noteContent) return closeNote();
     if (!user || !user._id) {
       Alert.alert("Vous devez être connecté pour sauvegarder une note")
       return
@@ -130,12 +130,12 @@ const Index = () => {
         const res = await api.put(`/note/user/${updateNoteId}`, {
           title: title || "Sans titre",
           content: noteContent
-        })
+        });
 
         if (res.ok) {
-          await fetchNotes()
-          closeNote()
-          setUpdateNoteId(null)
+          await fetchNotes();
+          closeNote();
+          setUpdateNoteId(null);
         } else {
           Alert.alert("Erreur lors de la mise à jour", res.message || res.code || "");
         }
@@ -145,11 +145,11 @@ const Index = () => {
           title: title || "Sans titre",
           content: noteContent,
           user_id: user._id
-        })
+        });
 
         if (res.ok) {
-          await fetchNotes()
-          closeNote()
+          await fetchNotes();
+          closeNote();
         } else {
           Alert.alert("Erreur lors de la sauvegarde", res.message || res.code || "");
         }
@@ -162,7 +162,7 @@ const Index = () => {
 
   // logique de tri des notes
   const sortedNotes = useMemo(() => {
-    const notesCopy = [...notes];
+    const notesCopy = [...(notes || [])];
     if (sortBy === "date") {
       // tri par date de mise à jour (ou création si pas de mise à jour)
       return notesCopy.sort((a, b) => new Date(b.updatedAt || b._id) - new Date(a.updatedAt || a._id));
