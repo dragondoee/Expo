@@ -3,6 +3,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const crypto = require('crypto');
+const mongoose = require("mongoose");
 
 const UserObject = require('../models/user');
 
@@ -10,9 +11,10 @@ const config = require('../config');
 
 const JWT_MAX_AGE = "210m"; // 3h30
 
-const SERVEUR_ERROR = 'SERVEUR_ERROR';
+const { error } = require("../utils/response");
+const msg = require("../utils/messages");
 
-const { validateSignup, validateLogin } = require('../utils/user');
+const { validateSignup, validateLogin, validateUserUpdate } = require('../utils/user');
 
 // ===================================== GET =====================================
 
@@ -22,12 +24,13 @@ router.get('/me', passport.authenticate('user', { session: false }), async (req,
     const user = await UserObject.findById(req.user._id);
 
     if (!user)
-      return res.status(404).send({ ok: false, code: 'user not found' });
+      return error(res, 404, msg.user.NOT_FOUND);
 
-    return res.status(200).send({ ok: true, user });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+    return res.status(200).send({ ok: true, data: user });
+    
+  } catch (e) {
+    console.log(e);
+    error(res, 500, msg.server.ERROR);
   }
 });
 
@@ -36,26 +39,31 @@ router.get('/all', passport.authenticate('admin', { session: false }), async (re
     const users = await UserObject.find();
 
     if (!users || users.length === 0)
-      return res.status(404).send({ ok: false, code: 'user not found' });
+      return error(res, 404, msg.user.NOT_FOUND);
 
-    return res.status(200).send({ ok: true, users });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+    return res.status(200).send({ ok: true, data: users });
+
+  } catch (e) {
+    console.log(e);
+    error(res, 500, msg.server.ERROR);
   }
 });
 
 router.get('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id))
+      return error(res, 400, msg.server.INVALID_ID);
+
     const user = await UserObject.findById(req.params.id);
 
     if (!user)
-      return res.status(404).send({ ok: false, code: 'user not found' });
+      return error(res, 404, msg.user.NOT_FOUND);
 
-    return res.status(200).send({ ok: true, user });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+    return res.status(200).send({ ok: true, data: user });
+
+  } catch (e) {
+    console.log(e);
+    error(res, 500, msg.server.ERROR);
   }
 });
 
@@ -64,25 +72,21 @@ router.get('/:id', passport.authenticate('admin', { session: false }), async (re
 // SIGNUP
 const { isStrongPassword } = require("../utils/password");
 router.post("/signup", async (req, res) => {
-  const error = validateSignup(req.body);
-  if (error) return res.status(400).send({ ok: false, message: error });
+  const ValidateError = validateSignup(req.body);
+  if (ValidateError) return error(res, 400, { ok: false, message: ValidateError });
 
   try {
     let { email, first_name, last_name, password, role } = req.body;
 
     if (!isStrongPassword(password))
-      return res.status(400).send({
-        ok: false,
+      return error(res, 400, {
+        code: "WEAK_PASSWORD",
         message:
           "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.",
       });
 
     if (await UserObject.findOne({ email }))
-      return res.status(401).send({
-        ok: false,
-        code: "INVALID_USER",
-        message: "Email is invalid",
-      });
+      return error(res, 401, msg.user.ALREADY_EXISTS);
 
     const user = await UserObject.create({ 
       email: email, 
@@ -100,44 +104,29 @@ router.post("/signup", async (req, res) => {
     });
 
     return res.status(200).send({ ok: true, token, data: user });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send({ ok: false, code: "SERVER_ERROR" });
+
+  } catch (e) {
+    console.log(e);
+    return error(res, 500, msg.server.ERROR);
   }
 });
 
 // LOGIN
 router.post("/login", async (req, res) => {
-  const error = validateLogin(req.body);
-  if (error) return res.status(400).send({ ok: false, message: error });
-  
   try {
-    let { password, email } = req.body;
-
-    if (!email || !password)
-      return res.status(400).send({
-        ok: false,
-        code: "EMAIL_AND_PASSWORD_REQUIRED",
-        message: "Email and password are required",
-      });
+    const ValidateError = validateLogin(req.body);
+    if (ValidateError) return error(res, 400, { ok: false, message: ValidateError });
+    
+    const { password, email } = req.body;
 
     const user = await UserObject.findOne({ email });
 
     if (!user)
-      return res.status(401).send({
-        ok: false,
-        code: "INVALID_USER",
-        message: "Email or password is invalid",
-      });
+      return error(res, 404, msg.user.NOT_FOUND);
 
     const match = await user.comparePassword(password);
-
     if (!match)
-      return res.status(401).send({
-        ok: false,
-        code: "EMAIL_OR_PASSWORD_INVALID",
-        message: "Email or password is invalid",
-      });
+      return error(res, 401, msg.auth.INVALID_CREDENTIALS);
 
     user.set({ last_login_at: Date.now() });
     await user.save();
@@ -147,9 +136,10 @@ router.post("/login", async (req, res) => {
     });
 
     return res.status(200).send({ ok: true, token, data: user });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).send({ ok: false, code: "SERVER_ERROR" });
+
+  } catch (e) {
+    console.log(e);
+    return error(res, 500, msg.server.ERROR);
   }
 });
 
@@ -157,33 +147,42 @@ router.post("/login", async (req, res) => {
 
 // Mise à jour de son propre compte
 router.put('/me', passport.authenticate('user', { session: false }), async (req, res) => {
-  const error = validateUserUpdate(req.body);
-  if (error) return res.status(400).send({ ok: false, message: error });
-
   try {
+    const ValidateError = validateUserUpdate(req.body);
+    if (ValidateError) return error(res, 400, { ok: false, message: ValidateError });
     const updates = req.body;
     const user = await UserObject.findByIdAndUpdate(req.user._id, updates, { new: true });
 
     if (!user)
-      return res.status(404).send({ ok: false, code: 'user not found' });
+      return error(res, 404, msg.user.NOT_FOUND);
+
     return res.status(200).send({ ok: true, data: user });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+
+  } catch (e) {
+    console.log(e);
+    error(res, 500, msg.server.ERROR);
   }
 });
 
 router.put('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id))
+      return error(res, 400, msg.server.INVALID_ID);
+
+    const ValidateError = validateUserUpdate(req.body);
+    if (ValidateError) return error(res, 400, { ok: false, message: ValidateError });
+    
     const updates = req.body;
     const user = await UserObject.findByIdAndUpdate(req.params.id, updates, { new: true });
 
     if (!user)
-      return res.status(404).send({ ok: false, code: 'user not found' });
+      return error(res, 404, msg.user.NOT_FOUND);
+
     return res.status(200).send({ ok: true, data: user });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+
+  } catch (e) {
+    console.log(e);
+    error(res, 500, msg.server.ERROR);
   }
 });
 
@@ -195,28 +194,31 @@ router.delete('/me', passport.authenticate('user', { session: false }), async (r
     const user = await UserObject.findByIdAndDelete(req.user._id);
 
     if (!user)
-      return res.status(404).send({ ok: false, code: 'user not found' });
+      return error(res, 404, msg.user.NOT_FOUND);
 
-    return res.status(200).send({ ok: true, message: 'user deleted' });
+    return res.status(200).send({ ok: true, data: user });
 
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+  } catch (e) {
+    console.log(e);
+    error(res, 500, msg.server.ERROR);
   }
 });
 
 router.delete('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id))
+      return error(res, 400, msg.server.INVALID_ID);
+
     const user = await UserObject.findByIdAndDelete(req.params.id);
 
     if (!user)
-      return res.status(404).send({ ok: false, code: 'user not found' });
+      return error(res, 404, msg.user.NOT_FOUND);
 
-    return res.status(200).send({ ok: true, message: 'user deleted' });
+    return res.status(200).send({ ok: true, data: user });
 
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({ ok: false, code: SERVEUR_ERROR, error });
+  } catch (e) {
+    console.log(e);
+    error(res, 500, msg.server.ERROR);
   }
 });
 

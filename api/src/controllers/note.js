@@ -3,6 +3,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const crypto = require('crypto');
+const mongoose = require("mongoose");
 
 const UserObject = require('../models/note');
 
@@ -10,8 +11,8 @@ const config = require('../config');
 
 const JWT_MAX_AGE = "210m"; // 3h30
 
-const SERVEUR_ERROR = 'SERVEUR_ERROR';
-
+const error = require("../utils/response");
+const msg = require("../utils/messages");
 
 // ===================================== GET ======================================
 
@@ -21,12 +22,14 @@ router.get('/user/all', passport.authenticate('user', { session: false }), async
     try {
         const notes = await UserObject.find({ user_id: req.user._id });
         if (!notes || notes.length === 0)
-            return res.status(404).send({ ok: false, code: 'notes not found' });
-        return res.status(200).send({ ok: true, notes });
+            return error(res, 404, msg.note.NOT_FOUND);
+
+        console.log(notes);
+        return res.status(200).send({ ok: true, data: notes });
     }
-    catch (error) {
-        console.error(error);
-        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
+    catch (e) {
+        console.error(e);
+        return error(res, 500, msg.server.ERROR);
     }
 });
 
@@ -34,14 +37,18 @@ router.get('/user/all', passport.authenticate('user', { session: false }), async
 router.get('/user/:id', passport.authenticate('user', { session: false }), async (req, res) => {
     console.log("[API] Récupération d'une note de l'utilisateur :", req.user._id);
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return error(res, 400, msg.server.INVALID_ID);
+        
         const note = await UserObject.find({ user_id: req.user._id, _id: req.params.id });
         if (!note || note.length === 0)
-            return res.status(404).send({ ok: false, code: 'note not found' });
-        return res.status(200).send({ ok: true, note });
+            return error(res, 404, msg.note.NOT_FOUND);
+
+        return res.status(200).send({ ok: true, data: note });
     }
-    catch (error) {
-        console.error(error);
-        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
+    catch (e) {
+        console.error(e);
+        return error(res, 500, msg.server.ERROR);
     }
 });
 
@@ -51,21 +58,27 @@ router.get('/all', passport.authenticate('admin', { session: false }), async (re
         const notes = await UserObject.find({});
         return res.send({ ok: true, notes });
     }
-    catch (error) {
-        console.error(error);
-        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
+    catch (e) {
+        console.error(e);
+        return error(res, 500, msg.server.ERROR);
     }
 });
 
 router.get('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return error(res, 400, msg.server.INVALID_ID);
+
         const note = await UserObject.findById(req.params.id);
+        
         if (!note || note.length === 0)
-            return res.status(404).send({ ok: false, code: 'note not found' });
-        return res.status(200).send({ ok: true, note });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
+            return error(res, 404, msg.note.NOT_FOUND);
+
+        return res.status(200).send({ ok: true, data: note, message: msg.note.FOUND.message });
+
+    } catch (e) {
+        console.error(e);
+        return error(res, 500, msg.server.ERROR);
     }
 });
 
@@ -84,10 +97,12 @@ router.post('/create', passport.authenticate('user', { session: false }), async 
         
         await newNote.save();
         console.log("[API] Note sauvegardée avec succès !");
-        return res.status(200).send({ ok: true, note: newNote });
-    } catch (error) {
-        console.error("[API] Erreur création :", error);
-        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
+
+        return res.status(200).send({ ok: true, data: newNote, message: msg.note.CREATED.message });
+
+    } catch (e) {
+        console.error("[API] Erreur création :", e);
+        return error(res, 500, msg.server.ERROR);
     }
 });
 
@@ -96,6 +111,9 @@ router.post('/create', passport.authenticate('user', { session: false }), async 
 // Mise à jour d'une note de l'utilisateur connecté
 router.put('/user/:id', passport.authenticate('user', { session: false }), async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return error(res, 400, msg.server.INVALID_ID);
+
         const { title, content } = req.body;
         const updatedNote = await UserObject.findByIdAndUpdate(
             { _id: req.params.id,  user_id: req.user._id },
@@ -103,16 +121,21 @@ router.put('/user/:id', passport.authenticate('user', { session: false }), async
             { new: true }
         );
         if (!updatedNote)
-            return res.status(404).send({ ok: false, code: 'note not found' });
-        return res.status(200).send({ ok: true, note: updatedNote });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
+            return error(res, 404, msg.note.NOT_FOUND);
+
+        return res.status(200).send({ ok: true, data: updatedNote, message: msg.note.UPDATED.message });
+
+    } catch (e) {
+        console.error(e);
+        return error(res, 500, msg.server.ERROR);
     }   
 });
 
 router.put('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return error(res, 400, msg.server.INVALID_ID);
+
         const { title, content } = req.body;
         const updatedNote = await UserObject.findByIdAndUpdate(
             req.params.id,
@@ -120,11 +143,11 @@ router.put('/:id', passport.authenticate('admin', { session: false }), async (re
             { new: true }
         );
         if (!updatedNote)
-            return res.status(404).send({ ok: false, code: 'note not found' });
-        return res.status(200).send({ ok: true, note: updatedNote });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
+            return error(res, 404, msg.note.NOT_FOUND);
+        return res.status(200).send({ ok: true, data: updatedNote, message: msg.note.UPDATED.message });
+    } catch (e) {
+        console.error(e);
+        return error(res, 500, msg.server.ERROR);
     }   
 });
 
@@ -133,25 +156,33 @@ router.put('/:id', passport.authenticate('admin', { session: false }), async (re
 // Suppression d'une note de l'utilisateur connecté
 router.delete('/user/:id', passport.authenticate('user', { session: false }), async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return error(res, 400, msg.server.INVALID_ID);
+
         const deletedNote = await UserObject.findByIdAndDelete({ _id: req.params.id,  user_id: req.user._id });
         if (!deletedNote)
-            return res.status(404).send({ ok: false, code: 'note not found' });
-        return res.status(200).send({ ok: true, note: deletedNote });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
+            return error(res, 404, msg.note.NOT_FOUND);
+        return res.status(200).send({ ok: true, data: deletedNote, message: msg.note.DELETED.message });
+    } catch (e) {
+        console.error(e);
+        return error(res, 500, msg.server.ERROR);
     }
 });
 
 router.delete('/:id', passport.authenticate('admin', { session: false }), async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id))
+            return error(res, 400, msg.server.INVALID_ID);
+
         const deletedNote = await UserObject.findByIdAndDelete(req.params.id);
         if (!deletedNote)
-            return res.status(404).send({ ok: false, code: 'note not found' });
-        return res.status(200).send({ ok: true, note: deletedNote });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).send({ ok: false, code: SERVEUR_ERROR });
+            return error(res, 404, msg.note.NOT_FOUND);
+
+        return res.status(200).send({ ok: true, data: deletedNote, message: msg.note.DELETED.message });
+
+    } catch (e) {
+        console.error(e);
+        return error(res, 500, msg.server.ERROR);
     }
 });
 
