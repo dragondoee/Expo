@@ -52,8 +52,8 @@ const LoginScreen = () => {
                 label="Mot de passe :"
                 value={password}
                 onChangeText={setPassword}
-                secureTextEntry
                 placeholder="Entrez votre mot de passe"
+                isPassword={true}
             />
 
             <ButtonComponent title="Se connecter" onPress={handleLogin} />

@@ -12,6 +12,8 @@ const JWT_MAX_AGE = "210m"; // 3h30
 
 const SERVEUR_ERROR = 'SERVEUR_ERROR';
 
+const { validateSignup, validateLogin } = require('../utils/user');
+
 // ===================================== GET =====================================
 
 // Récupérer les informations de son propre compte
@@ -62,6 +64,9 @@ router.get('/:id', passport.authenticate('admin', { session: false }), async (re
 // SIGNUP
 const { isStrongPassword } = require("../utils/password");
 router.post("/signup", async (req, res) => {
+  const error = validateSignup(req.body);
+  if (error) return res.status(400).send({ ok: false, message: error });
+
   try {
     let { email, first_name, last_name, password, role } = req.body;
 
@@ -103,6 +108,9 @@ router.post("/signup", async (req, res) => {
 
 // LOGIN
 router.post("/login", async (req, res) => {
+  const error = validateLogin(req.body);
+  if (error) return res.status(400).send({ ok: false, message: error });
+  
   try {
     let { password, email } = req.body;
 
@@ -149,6 +157,9 @@ router.post("/login", async (req, res) => {
 
 // Mise à jour de son propre compte
 router.put('/me', passport.authenticate('user', { session: false }), async (req, res) => {
+  const error = validateUserUpdate(req.body);
+  if (error) return res.status(400).send({ ok: false, message: error });
+
   try {
     const updates = req.body;
     const user = await UserObject.findByIdAndUpdate(req.user._id, updates, { new: true });

@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-import { Alert, Text } from "react-native";
+import { Alert, Text, View } from "react-native";
 import useAuthStore from "../store/authStore";
 import api from "../services/api";
 import ButtonComponent from "@/components/Button";
@@ -67,6 +67,9 @@ const SignupForm = () => {
     }
   };
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   return (
     <ScreenContainer title="Inscription" link="Vous avez un compte ? Se connecter" linkref="login">
 
@@ -92,21 +95,25 @@ const SignupForm = () => {
               placeholder="Email"
             />
 
-            <Input
-              label="* Mot de passe :"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              placeholder="Mot de passe"
-            />
-            <Text style={{ fontSize: 12, color: '#646464ff', position: 'relative', bottom: 15 }}>8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.</Text>
+              <Input
+                label="* Mot de passe :"
+                value={password}
+                onChangeText={setPassword}
+                placeholder="Mot de passe"
+                isPassword={true}
+              />
+
+              <Text style={{ fontSize: 12, color: '#646464ff', marginBottom: 15 }}>
+                  8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.
+              </Text>
 
             <Input
               label="* Confirmer le mot de passe :"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
-              secureTextEntry
+              secureTextEntry={!showConfirmPassword}
               placeholder="Confirmer le mot de passe"
+              isPassword={true}
             />
 
             <Text style={{ fontSize: 12, color: '#646464ff', marginBottom: 10 }}>* Champs obligatoires</Text>
