@@ -25,8 +25,18 @@ const validateLogin = (data) => {
 };
 
 
+const validateUserUpdate = (data) => {
+  const { email } = data;
+    if (email && !/\S+@\S+\.\S+/.test(email)) {
+        return "Format d'email invalide.";
+    }
+    return null;
+}
+
+
 
 module.exports = {
-  validateSignup,
-  validateLogin
+    validateSignup,
+    validateLogin,
+    validateUserUpdate,
 };
