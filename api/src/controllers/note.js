@@ -24,7 +24,6 @@ router.get('/user/all', passport.authenticate('user', { session: false }), async
         if (!notes || notes.length === 0)
             return error(res, 404, msg.note.NOT_FOUND);
 
-        console.log(notes);
         return res.status(200).send({ ok: true, data: notes });
     }
     catch (e) {
