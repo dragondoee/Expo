@@ -13,7 +13,7 @@ const ScreenContainer = ({ title, link, linkref, backlink, children, style }) =>
         >
             <KeyboardAwareScrollView
                 enableOnAndroid={true}
-                extraScrollHeight={50} 
+                extraScrollHeight={100} 
                 keyboardShouldPersistTaps="handled"
                 contentContainerStyle={{ flexGrow: 1 }}
             >

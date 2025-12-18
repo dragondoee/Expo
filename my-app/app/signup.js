@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Alert, Text } from "react-native";
 import useAuthStore from "../store/authStore";
 import api from "../services/api";
 import ButtonComponent from "@/components/Button";
@@ -67,8 +67,6 @@ const SignupForm = () => {
     }
   };
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
     <ScreenContainer title="Inscription" link="Vous avez un compte ? Se connecter" linkref="login">
@@ -103,7 +101,7 @@ const SignupForm = () => {
                 isPassword={true}
               />
 
-              <Text style={{ fontSize: 12, color: '#646464ff', marginBottom: 15 }}>
+              <Text style={{ fontSize: 12, color: '#646464ff', marginBottom: 15, position: 'relative', top: -5 }}>
                   8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.
               </Text>
 
@@ -111,7 +109,6 @@ const SignupForm = () => {
               label="* Confirmer le mot de passe :"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
-              secureTextEntry={!showConfirmPassword}
               placeholder="Confirmer le mot de passe"
               isPassword={true}
             />

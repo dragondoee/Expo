@@ -48,11 +48,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         position: 'relative',
+        marginBottom: -5,
     },
     input: {
         width: "100%",
         padding: 10,
-        paddingRight: 45, // Espace pour ne pas que le texte passe sous l'icône
+        paddingRight: 45,
         borderWidth: 1.3,
         borderColor: "#ccc",
         borderRadius: 5,

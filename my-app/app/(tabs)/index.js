@@ -54,7 +54,6 @@ const Index = () => {
 
   // logique de sélection notes
   const handleLongPress = (noteId) => {
-    // active le mode sélection et ajoute l'élément
     if (!selectedIds.includes(noteId)) {
       setSelectedIds([...selectedIds, noteId]);
     }
