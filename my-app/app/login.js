@@ -25,10 +25,8 @@ const LoginScreen = () => {
                 return;
             }
 
-            const userData = response;
-
-            setUser(userData.data);
-            setToken(userData.token);
+            setUser(response.data);
+            setToken(response.token);
             setIsLoggedIn(true);
 
         } catch (error) {

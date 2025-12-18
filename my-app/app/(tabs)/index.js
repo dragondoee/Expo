@@ -30,7 +30,7 @@ const Index = () => {
     try {
       const res = await api.get(`/note/user/all`);
       if (res.ok) {
-        setNotes(res.notes);
+        setNotes(res.data);
       }
     } catch (e) {
       console.log("Erreur chargement notes", e);
@@ -89,7 +89,7 @@ const Index = () => {
           onPress: async () => {
             try {
               // supprime toutes les notes cochées
-              await Promise.all(selectedIds.map(id => api.delete(`/note/user/${id}`)));
+              await Promise.all((selectedIds || []).map(id => api.delete(`/note/user/${id}`)));
 
               // recharge la liste et on quitte le mode sélection
               await fetchNotes();
@@ -210,20 +210,20 @@ const Index = () => {
           {/* affiche le nombre de notes */}
             <View style={{ marginBottom: 40, alignSelf: 'flex-start' }}>
             <Text style={styles.noteCountBadge}>
-              {notes.length} note{notes.length > 1 ? "s" : ""}
+              {notes?.length ?? 0} note{(notes?.length ?? 0) > 1 ? "s" : ""}
             </Text>
             </View>
 
 
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.notesGrid}>
-              {notes.length === 0 && (
+              {(notes?.length || 0) === 0 && (
                 <Text style={{ color: 'white', opacity: 0.9, fontSize: 16, marginTop: 20 }}>
                   Aucune note pour le moment
                 </Text>
               )}
 
-              {sortedNotes.map((item) => {
+              {(sortedNotes || []).map((item) => {
                 const isSelected = selectedIds.includes(item._id);
                 return (
                   <TouchableOpacity
